@@ -3,34 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Konfirmasi Simakan Ortu</title>
+  <title>Rumah Qur'an Baitul Itqan - Konfirmasi Simakan Ortu</title>
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 flex items-center justify-center min-h-screen p-4">
 
-  <div class="bg-white rounded-2xl shadow-sm p-6 text-center max-w-sm w-full border border-slate-100">
+  <div class="bg-white rounded-2xl shadow-sm p-6 text-center max-w-sm w-full border border-slate-100 space-y-4">
+    
+    <div class="flex flex-col items-center justify-center gap-2">
+      <img src="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png" alt="Logo RQ Baitul Itqan" class="w-12 h-12 rounded-full p-0.5 bg-slate-50 border border-slate-200 shadow-sm">
+      <div>
+        <h1 class="text-base font-bold text-slate-800">Rumah Qur'an Baitul Itqan</h1>
+        <p class="text-xs text-slate-500">Konfirmasi Simakan Orang Tua</p>
+      </div>
+    </div>
+
+    <hr class="border-dashed my-2">
+
     <div id="loading">
-      <p class="text-sm text-slate-500">Memproses konfirmasi...</p>
+      <p class="text-xs text-slate-500 animate-pulse">Memproses konfirmasi data...</p>
     </div>
     
     <div id="success" class="hidden space-y-3">
       <div class="text-5xl">✅</div>
-      <h2 class="text-xl font-bold text-emerald-600">Jazakumullah Khair!</h2>
-      <p class="text-sm text-slate-600">Konfirmasi simakan santri telah <b>berhasil dicatat</b> ke dalam sistem Rumah Quran.</p>
+      <h2 class="text-lg font-bold text-emerald-600">Jazakumullah Khair!</h2>
+      <p class="text-xs text-slate-600 leading-relaxed">Konfirmasi simakan santri telah <b>berhasil dicatat</b> ke dalam sistem Rumah Qur'an Baitul Itqan.</p>
     </div>
 
     <div id="error" class="hidden space-y-3">
       <div class="text-5xl">❌</div>
-      <h2 class="text-xl font-bold text-rose-600">Gagal Konfirmasi</h2>
-      <p id="errorMessage" class="text-sm text-slate-600">Link tidak valid atau data tidak ditemukan.</p>
+      <h2 class="text-lg font-bold text-rose-600">Gagal Konfirmasi</h2>
+      <p id="errorMessage" class="text-xs text-slate-600 leading-relaxed">Link tidak valid atau data tidak ditemukan.</p>
     </div>
   </div>
 
   <script>
-    // ISI DENGAN URL & KEY SUPABASE ANDA
-    const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA";
+    // ⚠️ SESUAIKAN DENGAN API URL & ANON KEY SUPABASE ANDA
+    const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; 
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     async function prosesKonfirmasi() {
@@ -45,7 +57,6 @@
 
       const timestamp = new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" });
 
-      // Update status disimak_ortu langsung di database Supabase
       const { data, error } = await supabaseClient
         .from('kartu_prestasi')
         .update({ disimak_ortu: `Sudah Disimak (${timestamp})` })
