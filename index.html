@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rumah Quran - Input Prestasi & Absens</title>
+  <title>Rumah Quran - Input Prestasi</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800">
@@ -15,11 +15,20 @@
   <div class="max-w-md mx-auto p-4">
     <form id="formPrestasi" class="bg-white rounded-xl shadow-sm p-5 space-y-4 border border-slate-100">
       
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Santri</label>
-        <select id="id_santri" required class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
-          <option value="">-- Memuat Data Santri... --</option>
-        </select>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Kelas</label>
+          <select id="filter_kelas" required class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+            <option value="">-- Memuat Kelas... --</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Santri</label>
+          <select id="id_santri" required disabled class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none disabled:bg-slate-200">
+            <option value="">-- Pilih Kelas Terlebih Dahulu --</option>
+          </select>
+        </div>
       </div>
 
       <div class="grid grid-cols-2 gap-3">
@@ -37,28 +46,80 @@
 
       <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Setoran Hafalan</p>
       <div class="grid grid-cols-2 gap-3">
-        <input type="text" id="hafalan_surat" placeholder="Nama Surat" class="border rounded-lg p-2.5 text-sm outline-none">
-        <input type="text" id="hafalan_ayat" placeholder="Ayat (cth: 1-15)" class="border rounded-lg p-2.5 text-sm outline-none">
+        <div>
+          <select id="hafalan_surat" class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
+            <option value="">-- Pilih Surat --</option>
+          </select>
+        </div>
+        <div>
+          <input type="text" id="hafalan_ayat" placeholder="Ayat (cth: 1-15)" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+        </div>
       </div>
-      <input type="text" id="hafalan_nilai" placeholder="Nilai (cth: A / Mumtaz)" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+      
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Nilai Hafalan</label>
+        <select id="hafalan_nilai" class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
+          <option value="">-- Pilih Nilai --</option>
+          <option value="A+">A+</option>
+          <option value="A">A</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B">B</option>
+          <option value="B-">B-</option>
+          <option value="C+">C+</option>
+        </select>
+      </div>
 
       <hr class="border-dashed my-2">
 
       <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Metode Ummi</p>
       <div class="grid grid-cols-2 gap-3">
-        <input type="text" id="ummi_jilid" placeholder="Jilid / Al-Quran" class="border rounded-lg p-2.5 text-sm outline-none">
-        <input type="text" id="ummi_halaman" placeholder="Halaman" class="border rounded-lg p-2.5 text-sm outline-none">
+        <div>
+          <select id="ummi_jilid" class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
+            <option value="">-- Pilih Jilid/Qur'an --</option>
+            <option value="Jilid 1">Jilid 1</option>
+            <option value="Jilid 2">Jilid 2</option>
+            <option value="Jilid 3">Jilid 3</option>
+            <option value="Jilid 4">Jilid 4</option>
+            <option value="Jilid 5">Jilid 5</option>
+            <option value="Jilid 6">Jilid 6</option>
+            <option value="Ghorib">Ghorib</option>
+            <option value="Tajwid">Tajwid</option>
+            <option value="Al Qur'an">Al Qur'an</option>
+          </select>
+        </div>
+        <div>
+          <input type="text" id="ummi_halaman" placeholder="Halaman" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+        </div>
       </div>
+
       <div class="grid grid-cols-2 gap-3">
-        <input type="text" id="ummi_materi" placeholder="Materi / Pokok" class="border rounded-lg p-2.5 text-sm outline-none">
-        <input type="text" id="ummi_nilai" placeholder="Nilai / Predikat" class="border rounded-lg p-2.5 text-sm outline-none">
+        <div>
+          <input type="text" id="ummi_materi" placeholder="Materi / Pokok" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+        </div>
+        <div>
+          <select id="ummi_nilai" class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
+            <option value="">-- Nilai Ummi --</option>
+            <option value="A+">A+</option>
+            <option value="A">A</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B">B</option>
+            <option value="B-">B-</option>
+            <option value="C+">C+</option>
+          </select>
+        </div>
       </div>
 
       <hr class="border-dashed my-2">
 
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1">Disimak Oleh (Guru)</label>
-        <input type="text" id="disimak_guru" required placeholder="Nama Ustadz/Ustadzah" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+        <select id="disimak_guru" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
+          <option value="">-- Pilih Ustadzah --</option>
+          <option value="Ustadzah Salamah">Ustadzah Salamah</option>
+          <option value="Ustadzah Rosianah">Ustadzah Rosianah</option>
+        </select>
       </div>
 
       <button type="submit" id="btnSubmit" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium py-3 rounded-lg shadow mt-2">
@@ -69,30 +130,80 @@
   </div>
 
   <script>
-    // GANTI DENGAN URL GOOGLE APPS SCRIPT ANDA
+    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
     const GAS_URL = "https://script.google.com/macros/s/AKfycbwiqj4jGEZqMM51QWjL8HuJmpcVCIBTPkFA4yeVQoiJ7GGSgTOSqtf1sWFQNHOs--7bDA/exec";
 
+    // Daftar 114 Surah Al-Qur'an
+    const daftarSurat = [
+      "Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Taubah", "Yunus",
+      "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra'", "Al-Kahf", "Maryam", "Tha-Ha",
+      "Al-Anbiya'", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Asy-Syu'ara'", "An-Naml", "Al-Qasash", "Al-'Ankabut", "Ar-Rum",
+      "Luqman", "As-Sajdah", "Al-Ahzab", "Saba'", "Fathir", "Ya-Sin", "Ash-Shaffat", "Shad", "Az-Zumar", "Ghafir",
+      "Fushshilat", "Asy-Syura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jatsiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf",
+      "Adz-Dzariyat", "Ath-Thur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadilah", "Al-Hasyr", "Al-Mumtahanah",
+      "Ash-Shaff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Thalaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij",
+      "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddatstsir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba'", "An-Nazi'at", "'Abasa",
+      "At-Takwir", "Al-Infitar", "Al-Muthaffifin", "Al-Insyiqaq", "Al-Buruj", "Ath-Thariq", "Al-A'la", "Al-Ghasyiyah", "Al-Fajr", "Al-Balad",
+      "Asy-Syams", "Al-Lail", "Ad-Dhuha", "Asy-Syarh", "At-Tin", "Al-'Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-'Adiyat",
+      "Al-Qari'ah", "At-Takatsur", "Al-'Asr", "Al-Humazah", "Al-Fil", "Quraisy", "Al-Ma'un", "Al-Kautsar", "Al-Kafirun", "An-Nashr",
+      "Al-Lahab", "Al-Ikhlash", "Al-Falaq", "An-Nas"
+    ];
+
+    let globalDataSantri = [];
+
     // Set tanggal default ke hari ini
-    document.getElementById('tanggal').valueToDate = new Date();
     document.getElementById('tanggal').value = new Date().toISOString().substring(0, 10);
 
-    // Fetch daftar santri saat halaman dibuka
+    // Populate Dropdown Surat
+    function populateSurat() {
+      const selectSurat = document.getElementById('hafalan_surat');
+      daftarSurat.forEach((surat, index) => {
+        selectSurat.innerHTML += `<option value="${surat}">${index + 1}. ${surat}</option>`;
+      });
+    }
+
+    // Load Data Santri & Ekstrak Daftar Kelas
     async function loadSantri() {
       try {
         const res = await fetch(`${GAS_URL}?sheet=santri`);
         const json = await res.json();
-        const select = document.getElementById('id_santri');
-        select.innerHTML = '<option value="">-- Pilih Santri --</option>';
+        globalDataSantri = json.data;
+
+        // Ambil daftar kelas unik
+        const daftarKelas = [...new Set(globalDataSantri.map(s => s.kelas))].filter(Boolean);
         
-        json.data.forEach(santri => {
-          select.innerHTML += `<option value="${santri.id_santri}">${santri.nama_santri} (${santri.kelas})</option>`;
+        const selectKelas = document.getElementById('filter_kelas');
+        selectKelas.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+        daftarKelas.forEach(kelas => {
+          selectKelas.innerHTML += `<option value="${kelas}">${kelas}</option>`;
         });
+
       } catch (err) {
-        alert("Gagal memuat daftar santri");
+        alert("Gagal memuat data santri");
       }
     }
 
-    // Kirim Form ke Google Apps Script
+    // Event Listener saat Kelas Dipilih -> Filter Santri
+    document.getElementById('filter_kelas').addEventListener('change', (e) => {
+      const kelasDipilih = e.target.value;
+      const selectSantri = document.getElementById('id_santri');
+
+      if (!kelasDipilih) {
+        selectSantri.innerHTML = '<option value="">-- Pilih Kelas Terlebih Dahulu --</option>';
+        selectSantri.disabled = true;
+        return;
+      }
+
+      const santriFiltered = globalDataSantri.filter(s => s.kelas === kelasDipilih);
+      
+      selectSantri.innerHTML = '<option value="">-- Pilih Santri --</option>';
+      santriFiltered.forEach(santri => {
+        selectSantri.innerHTML += `<option value="${santri.id_santri}">${santri.nama_santri}</option>`;
+      });
+      selectSantri.disabled = false;
+    });
+
+    // Kirim Form ke Apps Script
     document.getElementById('formPrestasi').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btnSubmit');
@@ -119,8 +230,10 @@
           method: "POST",
           body: JSON.stringify({ targetSheet: "kartu_prestasi", payload: payload })
         });
-        alert("Data berhasil disimpan ke Google Sheets!");
+        alert("Data Prestasi Berhasil Disimpan!");
         document.getElementById('formPrestasi').reset();
+        document.getElementById('id_santri').disabled = true;
+        document.getElementById('tanggal').value = new Date().toISOString().substring(0, 10);
       } catch (err) {
         alert("Gagal menyimpan data!");
       } finally {
@@ -129,6 +242,8 @@
       }
     });
 
+    // Inisialisasi
+    populateSurat();
     loadSantri();
   </script>
 </body>
