@@ -3,17 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rumah Quran - Input Prestasi</title>
+  <title>Rumah Qur'an Baitul Itqan - Input Prestasi</title>
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800">
 
-  <div class="bg-emerald-600 text-white p-4 sticky top-0 shadow-md z-10">
-    <h1 class="text-lg font-bold text-center">📖 Kartu Prestasi Santri</h1>
+  <div class="bg-emerald-600 text-white p-3 sticky top-0 shadow-md z-10 flex items-center justify-center gap-3">
+    <img src="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png" alt="Logo RQ Baitul Itqan" class="w-8 h-8 rounded-full bg-white p-0.5 shadow-sm">
+    <div class="text-center">
+      <h1 class="text-base font-bold leading-tight">Rumah Qur'an Baitul Itqan</h1>
+      <p class="text-[11px] text-emerald-100 font-medium">📖 Kartu Prestasi Santri</p>
+    </div>
   </div>
 
   <div class="max-w-md mx-auto p-4">
+    <div class="flex justify-between items-center mb-4 text-xs font-medium">
+      <a href="santri.html" class="bg-white hover:bg-slate-100 text-emerald-700 px-3 py-2 rounded-lg border border-slate-200 shadow-sm flex items-center gap-1.5 transition-all">
+        <span>👥</span> Kelola Santri
+      </a>
+      <a href="prestasi.html" class="bg-white hover:bg-slate-100 text-emerald-700 px-3 py-2 rounded-lg border border-slate-200 shadow-sm flex items-center gap-1.5 transition-all">
+        <span>📜</span> Rekap Prestasi
+      </a>
+    </div>
+
     <form id="formPrestasi" class="bg-white rounded-xl shadow-sm p-5 space-y-4 border border-slate-100">
       
       <div class="space-y-3">
@@ -183,52 +197,55 @@
   </div>
 
   <script>
-    // ⚠️ GANTI DENGAN API URL & ANON KEY SUPABASE ANDA
-    const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; // 
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; // 
+    // ⚠️ SESUAIKAN DENGAN API URL & ANON KEY SUPABASE ANDA
+    const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; 
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; 
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // ⚠️ GANTI DENGAN URL GITHUB PAGES ANDA (Termasuk nama repo)
-    const BASE_URL_GITHUB = "https://shopee-art.github.io/rqbi/"; // 
+    // ⚠️ SESUAIKAN DENGAN URL GITHUB PAGES ANDA
+    const BASE_URL_GITHUB = "https://username_anda.github.io/nama_repository";
 
-    // Daftar 114 Surah Al-Qur'an 
-    const daftarSurat = [
-      "Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Taubah", "Yunus",
-      "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra'", "Al-Kahf", "Maryam", "Tha-Ha",
-      "Al-Anbiya'", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Asy-Syu'ara'", "An-Naml", "Al-Qasash", "Al-'Ankabut", "Ar-Rum",
-      "Luqman", "As-Sajdah", "Al-Ahzab", "Saba'", "Fathir", "Ya-Sin", "Ash-Shaffat", "Shad", "Az-Zumar", "Ghafir",
-      "Fushshilat", "Asy-Syura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jatsiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf",
-      "Adz-Dzariyat", "Ath-Thur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadilah", "Al-Hasyr", "Al-Mumtahanah",
-      "Ash-Shaff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Thalaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij",
-      "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddatstsir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba'", "An-Nazi'at", "'Abasa",
-      "At-Takwir", "Al-Infitar", "Al-Muthaffifin", "Al-Insyiqaq", "Al-Buruj", "Ath-Thariq", "Al-A'la", "Al-Ghasyiyah", "Al-Fajr", "Al-Balad",
-      "Asy-Syams", "Al-Lail", "Ad-Dhuha", "Asy-Syarh", "At-Tin", "Al-'Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-'Adiyat",
-      "Al-Qari'ah", "At-Takatsur", "Al-'Asr", "Al-Humazah", "Al-Fil", "Quraisy", "Al-Ma'un", "Al-Kautsar", "Al-Kafirun", "An-Nashr",
-      "Al-Lahab", "Al-Ikhlash", "Al-Falaq", "An-Nas"
-    ];
+// Daftar 114 Surah Al-Qur'an (Urutan Dibalik: 114 An-Nas s.d 1 Al-Fatihah)
+const daftarSurat = [
+  "An-Nas", "Al-Falaq", "Al-Ikhlash", "Al-Lahab", "An-Nashr", "Al-Kafirun", "Al-Kautsar", "Al-Ma'un", "Quraisy", "Al-Fil",
+  "Al-Humazah", "Al-'Asr", "At-Takatsur", "Al-Qari'ah", "Al-'Adiyat", "Az-Zalzalah", "Al-Bayyinah", "Al-Qadr", "Al-'Alaq", "At-Tin",
+  "Asy-Syarh", "Ad-Dhuha", "Al-Lail", "Asy-Syams", "Al-Balad", "Al-Fajr", "Al-Ghasyiyah", "Al-A'la", "Ath-Thariq", "Al-Buruj",
+  "Al-Insyiqaq", "Al-Muthaffifin", "Al-Infitar", "At-Takwir", "'Abasa", "An-Nazi'at", "An-Naba'", "Al-Mursalat", "Al-Insan", "Al-Qiyamah",
+  "Al-Muddatstsir", "Al-Muzzammil", "Al-Jinn", "Nuh", "Al-Ma'arij", "Al-Haqqah", "Al-Qalam", "Al-Mulk", "At-Tahrim", "At-Thalaq",
+  "At-Taghabun", "Al-Munafiqun", "Al-Jumu'ah", "Ash-Shaff", "Al-Mumtahanah", "Al-Hasyr", "Al-Mujadilah", "Al-Hadid", "Al-Waqi'ah", "Ar-Rahman",
+  "Al-Qamar", "An-Najm", "Ath-Thur", "Adz-Dzariyat", "Qaf", "Al-Hujurat", "Al-Fath", "Muhammad", "Al-Ahqaf", "Al-Jatsiyah",
+  "Ad-Dukhan", "Az-Zukhruf", "Asy-Syura", "Fushshilat", "Ghafir", "Az-Zumar", "Shad", "Ash-Shaffat", "Ya-Sin", "Fathir",
+  "Saba'", "Al-Ahzab", "As-Sajdah", "Luqman", "Ar-Rum", "Al-'Ankabut", "Al-Qasash", "An-Naml", "Asy-Syu'ara'", "Al-Furqan",
+  "An-Nur", "Al-Mu'minun", "Al-Hajj", "Al-Anbiya'", "Tha-Ha", "Maryam", "Al-Kahf", "Al-Isra'", "An-Nahl", "Al-Hijr",
+  "Ibrahim", "Ar-Ra'd", "Yusuf", "Hud", "Yunus", "At-Taubah", "Al-Anfal", "Al-A'raf", "Al-An me", "Al-Ma'idah",
+  "An-Nisa'", "Ali 'Imran", "Al-Baqarah", "Al-Fatihah"
+];
 
     let globalDataSantri = [];
 
     // Set tanggal default ke hari ini
     document.getElementById('tanggal').value = new Date().toISOString().substring(0, 10);
 
-    // Populate Dropdown Surat 
-    function populateSurat() {
-      const selectSurat = document.getElementById('hafalan_surat');
-      daftarSurat.forEach((surat, index) => {
-        selectSurat.innerHTML += `<option value="${surat}">${index + 1}. ${surat}</option>`;
-      });
-    }
+    // Populate Dropdown Surat
+	function populateSurat() {
+	  const selectSurat = document.getElementById('hafalan_surat');
+	  const totalSurat = daftarSurat.length; // 114
+	  
+	  daftarSurat.forEach((surat, index) => {
+		// Menghitung nomor asli surah (114 - index)
+		const nomorSurat = totalSurat - index;
+		selectSurat.innerHTML += `<option value="${surat}">${nomorSurat}. ${surat}</option>`;
+	  });
+	}
 
     // Load Data Santri & Filter Kelas dari Supabase
     async function loadSantri() {
       try {
-        const { data, error } = await db.from('santri').select('*');
+        const { data, error } = await db.from('santri').select('*').order('nama_santri');
         if (error) throw error;
 
         globalDataSantri = data;
 
-        // Ambil daftar kelas unik 
         const daftarKelas = [...new Set(globalDataSantri.map(s => s.kelas))].filter(Boolean);
         
         const selectKelas = document.getElementById('filter_kelas');
@@ -242,7 +259,7 @@
       }
     }
 
-    // Sisipkan karakter hijaiyah ke posisi kursor aktif [cite: 85, 89]
+    // Sisipkan karakter hijaiyah ke posisi kursor aktif
     function insertHijaiyah(char) {
       const input = document.getElementById('ummi_materi');
       const start = input.selectionStart;
@@ -254,7 +271,7 @@
       input.focus();
     }
 
-    // Event Listener Filter Santri berdasarkan Kelas 
+    // Event Listener Filter Santri berdasarkan Kelas
     document.getElementById('filter_kelas').addEventListener('change', (e) => {
       const kelasDipilih = e.target.value;
       const selectSantri = document.getElementById('id_santri');
@@ -274,7 +291,7 @@
       selectSantri.disabled = false;
     });
 
-    // Event Submit Form ke Supabase & Pemicu WA [cite: 102, 105]
+    // Event Submit Form ke Supabase & Pemicu WA
     document.getElementById('formPrestasi').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btnSubmit');
@@ -293,11 +310,10 @@
         ummi_materi: document.getElementById('ummi_materi').value,
         ummi_nilai: document.getElementById('ummi_nilai').value,
         disimak_guru: document.getElementById('disimak_guru').value,
-        disimak_ortu: "Pending" // Nilai default konfirmasi ortu [cite: 103]
+        disimak_ortu: "Pending"
       };
 
       try {
-        // Simpan ke Supabase dan kembalikan baris yang baru terbuat
         const { data, error } = await db.from('kartu_prestasi').insert([payload]).select();
 
         if (error) throw error;
@@ -307,19 +323,15 @@
         const noHpOrtu = santriTerpilih ? santriTerpilih.no_hp_ortu : "";
         const namaSantri = santriTerpilih ? santriTerpilih.nama_santri : "Santri";
 
-        // Link konfirmasi mengarah ke konfirmasi.html di GitHub Pages 
         const linkKonfirmasi = `${BASE_URL_GITHUB}/konfirmasi.html?id=${idBaru}`;
 
-        // Format Pesan WA [cite: 105, 134]
         const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nBerikut ringkasan setoran hari ini:\n- Hafalan: ${payload.hafalan_surat || '-'} (${payload.hafalan_ayat || '-'})\n- Ummi: ${payload.ummi_jilid || '-'} Hal. ${payload.ummi_halaman || '-'}\n\nMohon disimak kembali di rumah, lalu klik link di bawah ini untuk konfirmasi:\n${linkKonfirmasi}\n\nJazakumullah khair.`;
 
-        // Picu Aplikasi WhatsApp Bawaan HP [cite: 105, 129]
-        if (confirm("Data prestasi berhasil disimpan ke Supabase! Kirimkan pesan konfirmasi ke WhatsApp Orang Tua sekarang?")) {
+        if (confirm("Data prestasi berhasil disimpan! Kirimkan pesan konfirmasi ke WhatsApp Orang Tua sekarang?")) {
           const waUrl = `https://wa.me/${noHpOrtu}?text=${encodeURIComponent(teksPesan)}`;
           window.open(waUrl, '_blank');
         }
 
-        // Reset Form
         document.getElementById('formPrestasi').reset();
         document.getElementById('id_santri').disabled = true;
         document.getElementById('tanggal').value = new Date().toISOString().substring(0, 10);
@@ -332,7 +344,6 @@
       }
     });
 
-    // Inisialisasi awal
     populateSurat();
     loadSantri();
   </script>
