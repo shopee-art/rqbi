@@ -203,7 +203,7 @@
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // ⚠️ SESUAIKAN DENGAN URL GITHUB PAGES ANDA
-    const BASE_URL_GITHUB = "https://username_anda.github.io/nama_repository";
+    const BASE_URL_GITHUB = "https://shopee-art.github.io/rqbi";
 
     // Daftar 114 Surah Al-Qur'an (Dibalik dari 114 An-Nas s.d 1 Al-Fatihah)
     const daftarSurat = [
@@ -326,7 +326,8 @@
 
         // 3. Format Draf Pesan & Link Konfirmasi
         const linkKonfirmasi = `${BASE_URL_GITHUB}/konfirmasi.html?id=${idBaru}`;
-        const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nBerikut ringkasan setoran hari ini:\n- Hafalan: ${payload.hafalan_surat || '-'} (${payload.hafalan_ayat || '-'})\n- Ummi: ${payload.ummi_jilid || '-'} Hal. ${payload.ummi_halaman || '-'}\n\nMohon disimak kembali di rumah, lalu klik link di bawah ini untuk konfirmasi:\n${linkKonfirmasi}\n\nJazakumullah khair.`;
+        // Format Draf Pesan WA (Termasuk Nilai Hafalan & Ummi)
+		const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nBerikut ringkasan setoran hari ini:\n- Hafalan: ${payload.hafalan_surat || '-'} (${payload.hafalan_ayat || '-'}) | Nilai: ${payload.hafalan_nilai || '-'}\n- Ummi: ${payload.ummi_jilid || '-'} Hal. ${payload.ummi_halaman || '-'} | Nilai: ${payload.ummi_nilai || '-'}\n\nMohon disimak kembali di rumah, lalu klik link di bawah ini untuk konfirmasi:\n${linkKonfirmasi}\n\nJazakumullah khair.`;
 
         // 4. Tanya dan Buka WA via window.location.href (Tahan Blokir Pop-up)
         if (noHpOrtu) {
