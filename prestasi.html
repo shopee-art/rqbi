@@ -10,36 +10,42 @@
 <body class="bg-slate-50 font-sans text-slate-800 pb-10">
 
   <div class="bg-emerald-600 text-white p-4 sticky top-0 shadow-md z-10 flex justify-between items-center">
-    <h1 class="text-lg font-bold">📜 Rekap Kartu Prestasi</h1>
-    <a href="index.html" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-500">
-      ← Kembali ke Utama
+    <h1 class="text-base sm:text-lg font-bold">📜 Rekap Kartu Prestasi</h1>
+    <a href="index.html" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-500 font-medium">
+      ← Input Prestasi
     </a>
   </div>
 
-  <div class="max-w-6xl mx-auto p-4 space-y-6">
+  <div class="max-w-6xl mx-auto p-4 space-y-4">
 
-    <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3">
+    <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
       
-      <a href="index.html" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium px-4 py-2 rounded-lg text-xs flex items-center justify-center gap-1.5 shadow">
+      <a href="index.html" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium px-4 py-2.5 rounded-lg text-xs flex items-center justify-center gap-1.5 shadow">
         <span>➕</span> Tambah Catatan Prestasi
       </a>
 
       <div class="flex flex-col sm:flex-row gap-2">
-        <select id="filterSantri" onchange="filterData()" class="text-xs p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        <select id="filterSantri" onchange="filterData()" class="text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
           <option value="">-- Semua Santri --</option>
         </select>
-        <input type="text" id="searchKeyword" oninput="filterData()" placeholder="Cari surat, jilid, atau guru..." class="text-xs p-2 border border-slate-300 rounded-lg w-full sm:w-56 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        <input type="text" id="searchKeyword" oninput="filterData()" placeholder="Cari surat, jilid, atau ustadzah..." class="text-xs p-2.5 border border-slate-300 rounded-lg w-full sm:w-56 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
       </div>
 
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden space-y-3 p-4">
-      <div class="flex justify-between items-center">
-        <h2 class="text-sm font-bold text-slate-800">Daftar Catatan Prestasi</h2>
-        <span id="totalRecords" class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-2.5 py-0.5 rounded-full">0 Data</span>
-      </div>
+    <div class="flex justify-between items-center px-1">
+      <h2 class="text-xs font-bold text-slate-600 uppercase tracking-wider">Daftar Catatan Setoran</h2>
+      <span id="totalRecords" class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full">0 Data</span>
+    </div>
 
-      <div class="overflow-x-auto border rounded-lg">
+    <div id="mobileCardContainer" class="block md:hidden space-y-3">
+      <div class="p-6 text-center text-slate-400 bg-white rounded-xl border border-slate-100 text-xs">
+        Sedang mengambil data...
+      </div>
+    </div>
+
+    <div class="hidden md:block bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+      <div class="overflow-x-auto">
         <table class="w-full text-left text-xs border-collapse">
           <thead class="bg-slate-100 border-b font-semibold text-slate-700">
             <tr>
@@ -91,7 +97,7 @@
         </div>
 
         <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-100 space-y-2">
-          <p class="font-bold text-emerald-800">📖 Kolom Hafalan</p>
+          <p class="font-bold text-emerald-800">📖 Setoran Hafalan</p>
           <div class="grid grid-cols-3 gap-2">
             <div>
               <label class="block text-slate-600 mb-1">Surat</label>
@@ -109,7 +115,7 @@
         </div>
 
         <div class="p-3 bg-blue-50 rounded-lg border border-blue-100 space-y-2">
-          <p class="font-bold text-blue-800">📘 Kolom Ummi / Jilid</p>
+          <p class="font-bold text-blue-800">📘 Metode Ummi</p>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <div>
               <label class="block text-slate-600 mb-1">Jilid</label>
@@ -133,11 +139,11 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-medium text-slate-600 mb-1">Disimak Oleh (Guru)</label>
-            <input type="text" id="formGuru" placeholder="Ustadz Abdullah" class="w-full p-2 border border-slate-300 rounded-lg">
+            <input type="text" id="formGuru" placeholder="Ustadzah Salamah" class="w-full p-2 border border-slate-300 rounded-lg">
           </div>
           <div>
             <label class="block font-medium text-slate-600 mb-1">Disimak Oleh (Ortu)</label>
-            <input type="text" id="formOrtu" placeholder="Ayah / Ibu" class="w-full p-2 border border-slate-300 rounded-lg">
+            <input type="text" id="formOrtu" placeholder="Disimak Ortu / Pending" class="w-full p-2 border border-slate-300 rounded-lg">
           </div>
         </div>
 
@@ -186,7 +192,7 @@
       }
     }
 
-    // READ: Load Data Kartu Prestasi
+    // READ: Load Data Kartu Prestasi dari Supabase
     async function loadDataPrestasi() {
       try {
         const { data, error } = await db
@@ -196,22 +202,26 @@
 
         if (error) throw error;
         listPrestasi = data;
-        renderTabel(listPrestasi);
+        renderTampilan(listPrestasi);
       } catch (err) {
         alert("Gagal memuat data prestasi: " + err.message);
       }
     }
 
-    // Render Data ke Tabel
-    function renderTabel(data) {
-      const tbody = document.getElementById('tabelPrestasiBody');
+    // Render Data ke Tampilan Mobile Card & Desktop Table
+    function renderTampilan(data) {
+      const mobileContainer = document.getElementById('mobileCardContainer');
+      const tableBody = document.getElementById('tabelPrestasiBody');
       const totalSpan = document.getElementById('totalRecords');
-      tbody.innerHTML = '';
-
+      
+      mobileContainer.innerHTML = '';
+      tableBody.innerHTML = '';
       totalSpan.innerText = `${data.length} Data`;
 
       if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada catatan prestasi santri.</td></tr>`;
+        const emptyState = `<div class="p-6 text-center text-slate-400 bg-white rounded-xl border border-slate-100 text-xs">Belum ada catatan prestasi santri.</div>`;
+        mobileContainer.innerHTML = emptyState;
+        tableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada catatan prestasi santri.</td></tr>`;
         return;
       }
 
@@ -219,11 +229,63 @@
         const namaSantri = item.santri ? item.santri.nama_santri : (listSantriMap[item.id_santri]?.nama_santri || 'Santri Terhapus');
         const kelasSantri = item.santri ? item.santri.kelas : (listSantriMap[item.id_santri]?.kelas || '-');
 
-        // Format Hafalan & Ummi
-        const infoHafalan = item.surat ? `<b>${item.surat}</b> (Ayat ${item.ayat || '-'}) <br><span class="text-xs bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">Nilai: ${item.nilai_hafalan || '-'}</span>` : '<span class="text-slate-400">-</span>';
-        const infoUmmi = item.jilid ? `<b>${item.jilid}</b> Hal. ${item.halaman || '-'} <br><span class="text-xs bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">Materi: ${item.materi_ummi || '-'} | Nilai: ${item.nilai_ummi || '-'}</span>` : '<span class="text-slate-400">-</span>';
+        // Status badge disimak ortu
+        const isOrtuVerified = item.disimak_ortu && item.disimak_ortu.toLowerCase().includes('sudah');
+        const badgeOrtu = isOrtuVerified 
+          ? `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">✓ ${item.disimak_ortu}</span>`
+          : `<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[10px] font-medium">⏳ ${item.disimak_ortu || 'Pending'}</span>`;
 
-        tbody.innerHTML += `
+        // 1. RENDER CARD MOBILE
+        mobileContainer.innerHTML += `
+          <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-100 space-y-3">
+            <div class="flex justify-between items-start border-b border-slate-100 pb-2">
+              <div>
+                <h3 class="font-bold text-sm text-slate-800">${namaSantri}</h3>
+                <span class="inline-block bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[10px] font-medium mt-0.5">${kelasSantri}</span>
+              </div>
+              <div class="text-right">
+                <span class="text-xs font-semibold text-emerald-600 block">${item.tanggal || '-'}</span>
+                <span class="text-[10px] text-slate-400">TM Ke: ${item.tm_ke || '-'}</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-2 text-xs">
+              ${item.hafalan_surat ? `
+                <div class="bg-emerald-50/60 p-2.5 rounded-lg border border-emerald-100/60">
+                  <div class="text-[10px] font-bold text-emerald-700 uppercase">📖 Setoran Hafalan</div>
+                  <div class="font-semibold text-slate-800 mt-0.5">${item.hafalan_surat} <span class="text-slate-500 font-normal">(Ayat ${item.hafalan_ayat || '-'})</span></div>
+                  <div class="text-[11px] text-emerald-700 mt-0.5">Nilai: <b>${item.hafalan_nilai || '-'}</b></div>
+                </div>
+              ` : ''}
+
+              ${item.ummi_jilid ? `
+                <div class="bg-blue-50/60 p-2.5 rounded-lg border border-blue-100/60">
+                  <div class="text-[10px] font-bold text-blue-700 uppercase">📘 Metode Ummi</div>
+                  <div class="font-semibold text-slate-800 mt-0.5">${item.ummi_jilid} <span class="text-slate-500 font-normal">(Hal. ${item.ummi_halaman || '-'})</span></div>
+                  <div class="text-[11px] text-blue-700 mt-0.5">Materi: <b>${item.ummi_materi || '-'}</b> | Nilai: <b>${item.ummi_nilai || '-'}</b></div>
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex justify-between items-center text-xs">
+              <div class="space-y-1">
+                <div class="text-[11px] text-slate-500">Guru: <b>${item.disimak_guru || '-'}</b></div>
+                <div>${badgeOrtu}</div>
+              </div>
+              
+              <div class="flex gap-1.5">
+                <button onclick="bukaModalEdit(${item.id_prestasi})" class="bg-amber-100 hover:bg-amber-200 active:scale-95 text-amber-800 px-3 py-1.5 rounded-lg text-xs font-medium transition-all">Edit</button>
+                <button onclick="hapusPrestasi(${item.id_prestasi})" class="bg-rose-100 hover:bg-rose-200 active:scale-95 text-rose-700 px-3 py-1.5 rounded-lg text-xs font-medium transition-all">Hapus</button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // 2. RENDER TABEL DESKTOP
+        const infoHafalan = item.hafalan_surat ? `<b>${item.hafalan_surat}</b> (Ayat ${item.hafalan_ayat || '-'}) <br><span class="text-xs bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">Nilai: ${item.hafalan_nilai || '-'}</span>` : '<span class="text-slate-400">-</span>';
+        const infoUmmi = item.ummi_jilid ? `<b>${item.ummi_jilid}</b> Hal. ${item.ummi_halaman || '-'} <br><span class="text-xs bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">Materi: ${item.ummi_materi || '-'} | Nilai: ${item.ummi_nilai || '-'}</span>` : '<span class="text-slate-400">-</span>';
+
+        tableBody.innerHTML += `
           <tr class="hover:bg-slate-50 transition-all">
             <td class="p-3">
               <span class="font-semibold text-slate-800">${item.tanggal || '-'}</span>
@@ -235,9 +297,9 @@
             </td>
             <td class="p-3 leading-relaxed">${infoHafalan}</td>
             <td class="p-3 leading-relaxed">${infoUmmi}</td>
-            <td class="p-3 text-[11px]">
-              <div>Guru: <b>${item.guru_penyimak || '-'}</b></div>
-              <div>Ortu: <b>${item.ortu_penyimak || '-'}</b></div>
+            <td class="p-3 text-[11px] space-y-1">
+              <div>Guru: <b>${item.disimak_guru || '-'}</b></div>
+              <div>${badgeOrtu}</div>
             </td>
             <td class="p-3 text-center space-x-1">
               <button onclick="bukaModalEdit(${item.id_prestasi})" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-2 py-1 rounded text-xs">Edit</button>
@@ -248,7 +310,7 @@
       });
     }
 
-    // Buka Modal khusus untuk Edit Data
+    // Modal Edit Handler
     function bukaModalEdit(id) {
       const item = listPrestasi.find(p => p.id_prestasi === id);
       if (!item) return;
@@ -258,17 +320,17 @@
       document.getElementById('formTm').value = item.tm_ke || '';
       document.getElementById('formTanggal').value = item.tanggal || '';
 
-      document.getElementById('formSurat').value = item.surat || '';
-      document.getElementById('formAyat').value = item.ayat || '';
-      document.getElementById('formNilaiHafalan').value = item.nilai_hafalan || '';
+      document.getElementById('formSurat').value = item.hafalan_surat || '';
+      document.getElementById('formAyat').value = item.hafalan_ayat || '';
+      document.getElementById('formNilaiHafalan').value = item.hafalan_nilai || '';
 
-      document.getElementById('formJilid').value = item.jilid || '';
-      document.getElementById('formHalaman').value = item.halaman || '';
-      document.getElementById('formMateri').value = item.materi_ummi || '';
-      document.getElementById('formNilaiUmmi').value = item.nilai_ummi || '';
+      document.getElementById('formJilid').value = item.ummi_jilid || '';
+      document.getElementById('formHalaman').value = item.ummi_halaman || '';
+      document.getElementById('formMateri').value = item.ummi_materi || '';
+      document.getElementById('formNilaiUmmi').value = item.ummi_nilai || '';
 
-      document.getElementById('formGuru').value = item.guru_penyimak || '';
-      document.getElementById('formOrtu').value = item.ortu_penyimak || '';
+      document.getElementById('formGuru').value = item.disimak_guru || '';
+      document.getElementById('formOrtu').value = item.disimak_ortu || '';
 
       const modal = document.getElementById('modalForm');
       modal.classList.remove('hidden');
@@ -289,18 +351,18 @@
       if (!id) return;
 
       const payload = {
-        id_santri: document.getElementById('formSantri').value,
+        id_santri: parseInt(document.getElementById('formSantri').value),
         tm_ke: document.getElementById('formTm').value ? parseInt(document.getElementById('formTm').value) : null,
         tanggal: document.getElementById('formTanggal').value,
-        surat: document.getElementById('formSurat').value,
-        ayat: document.getElementById('formAyat').value,
-        nilai_hafalan: document.getElementById('formNilaiHafalan').value,
-        jilid: document.getElementById('formJilid').value,
-        halaman: document.getElementById('formHalaman').value,
-        materi_ummi: document.getElementById('formMateri').value,
-        nilai_ummi: document.getElementById('formNilaiUmmi').value,
-        guru_penyimak: document.getElementById('formGuru').value,
-        ortu_penyimak: document.getElementById('formOrtu').value
+        hafalan_surat: document.getElementById('formSurat').value,
+        hafalan_ayat: document.getElementById('formAyat').value,
+        hafalan_nilai: document.getElementById('formNilaiHafalan').value,
+        ummi_jilid: document.getElementById('formJilid').value,
+        ummi_halaman: document.getElementById('formHalaman').value,
+        ummi_materi: document.getElementById('formMateri').value,
+        ummi_nilai: document.getElementById('formNilaiUmmi').value,
+        disimak_guru: document.getElementById('formGuru').value,
+        disimak_ortu: document.getElementById('formOrtu').value
       };
 
       try {
@@ -339,15 +401,15 @@
         const matchSantri = !santriId || String(p.id_santri) === String(santriId);
         const namaSantri = p.santri ? p.santri.nama_santri.toLowerCase() : '';
         const matchKeyword = !keyword || 
-          (p.surat && p.surat.toLowerCase().includes(keyword)) ||
-          (p.jilid && p.jilid.toLowerCase().includes(keyword)) ||
-          (p.guru_penyimak && p.guru_penyimak.toLowerCase().includes(keyword)) ||
+          (p.hafalan_surat && p.hafalan_surat.toLowerCase().includes(keyword)) ||
+          (p.ummi_jilid && p.ummi_jilid.toLowerCase().includes(keyword)) ||
+          (p.disimak_guru && p.disimak_guru.toLowerCase().includes(keyword)) ||
           namaSantri.includes(keyword);
 
         return matchSantri && matchKeyword;
       });
 
-      renderTabel(filtered);
+      renderTampilan(filtered);
     }
 
     // Jalankan inisialisasi saat halaman dibuka
