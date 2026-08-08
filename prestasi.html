@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rekap Kartu Prestasi Santri - Rumah Quran</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 pb-10">
+
+  <div class="bg-emerald-600 text-white p-4 sticky top-0 shadow-md z-10 flex justify-between items-center">
+    <h1 class="text-lg font-bold">📜 Rekap Kartu Prestasi</h1>
+    <a href="index.html" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-500">
+      ← Kembali ke Utama
+    </a>
+  </div>
+
+  <div class="max-w-6xl mx-auto p-4 space-y-6">
+
+    <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3">
+      
+      <a href="index.html" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium px-4 py-2 rounded-lg text-xs flex items-center justify-center gap-1.5 shadow">
+        <span>➕</span> Tambah Catatan Prestasi
+      </a>
+
+      <div class="flex flex-col sm:flex-row gap-2">
+        <select id="filterSantri" onchange="filterData()" class="text-xs p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          <option value="">-- Semua Santri --</option>
+        </select>
+        <input type="text" id="searchKeyword" oninput="filterData()" placeholder="Cari surat, jilid, atau guru..." class="text-xs p-2 border border-slate-300 rounded-lg w-full sm:w-56 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+      </div>
+
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden space-y-3 p-4">
+      <div class="flex justify-between items-center">
+        <h2 class="text-sm font-bold text-slate-800">Daftar Catatan Prestasi</h2>
+        <span id="totalRecords" class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-2.5 py-0.5 rounded-full">0 Data</span>
+      </div>
+
+      <div class="overflow-x-auto border rounded-lg">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead class="bg-slate-100 border-b font-semibold text-slate-700">
+            <tr>
+              <th class="p-3">Tanggal / TM</th>
+              <th class="p-3">Santri</th>
+              <th class="p-3">Setoran Hafalan</th>
+              <th class="p-3">Setoran Ummi</th>
+              <th class="p-3">Disimak Oleh</th>
+              <th class="p-3 text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabelPrestasiBody" class="divide-y text-slate-600">
+            <tr>
+              <td colspan="6" class="p-4 text-center text-slate-400">Sedang mengambil data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="modalForm" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="bg-white rounded-xl shadow-lg p-5 max-w-lg w-full space-y-4 my-8">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 id="modalTitle" class="text-sm font-bold text-slate-800">✏️ Edit Catatan Prestasi</h3>
+        <button onclick="tutupModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+      </div>
+
+      <form id="formPrestasi" class="space-y-3 text-xs">
+        <input type="hidden" id="editId">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-medium text-slate-600 mb-1">Pilih Santri *</label>
+            <select id="formSantri" required class="w-full p-2 border border-slate-300 rounded-lg">
+              <option value="">-- Pilih Santri --</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-medium text-slate-600 mb-1">Tatap Muka Ke- (TM)</label>
+            <input type="number" id="formTm" placeholder="Contoh: 5" class="w-full p-2 border border-slate-300 rounded-lg">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-medium text-slate-600 mb-1">Tanggal *</label>
+          <input type="date" id="formTanggal" required class="w-full p-2 border border-slate-300 rounded-lg">
+        </div>
+
+        <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-100 space-y-2">
+          <p class="font-bold text-emerald-800">📖 Kolom Hafalan</p>
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-slate-600 mb-1">Surat</label>
+              <input type="text" id="formSurat" placeholder="An-Naba" class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+            </div>
+            <div>
+              <label class="block text-slate-600 mb-1">Ayat</label>
+              <input type="text" id="formAyat" placeholder="1-15" class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+            </div>
+            <div>
+              <label class="block text-slate-600 mb-1">Nilai</label>
+              <input type="text" id="formNilaiHafalan" placeholder="A / 90" class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-blue-50 rounded-lg border border-blue-100 space-y-2">
+          <p class="font-bold text-blue-800">📘 Kolom Ummi / Jilid</p>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div>
+              <label class="block text-slate-600 mb-1">Jilid</label>
+              <input type="text" id="formJilid" placeholder="Jilid 3" class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+            </div>
+            <div>
+              <label class="block text-slate-600 mb-1">Halaman</label>
+              <input type="text" id="formHalaman" placeholder="12" class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+            </div>
+            <div>
+              <label class="block text-slate-600 mb-1">Materi</label>
+              <input type="text" id="formMateri" placeholder="Mad Thabi'i" class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+            </div>
+            <div>
+              <label class="block text-slate-600 mb-1">Nilai</label>
+              <input type="text" id="formNilaiUmmi" placeholder="B / 80" class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-medium text-slate-600 mb-1">Disimak Oleh (Guru)</label>
+            <input type="text" id="formGuru" placeholder="Ustadz Abdullah" class="w-full p-2 border border-slate-300 rounded-lg">
+          </div>
+          <div>
+            <label class="block font-medium text-slate-600 mb-1">Disimak Oleh (Ortu)</label>
+            <input type="text" id="formOrtu" placeholder="Ayah / Ibu" class="w-full p-2 border border-slate-300 rounded-lg">
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3 border-t">
+          <button type="button" onclick="tutupModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg font-medium">Batal</button>
+          <button type="submit" id="btnSimpan" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium">Update Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ SESUAIKAN DENGAN API URL & ANON KEY SUPABASE ANDA
+    const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; 
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; 
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let listPrestasi = [];
+    let listSantriMap = {};
+
+    // Inisialisasi awal
+    async function init() {
+      await loadOptionsSantri();
+      await loadDataPrestasi();
+    }
+
+    // Load daftar santri untuk Dropdown Modal Edit & Filter
+    async function loadOptionsSantri() {
+      try {
+        const { data, error } = await db.from('santri').select('id_santri, nama_santri, kelas').order('nama_santri');
+        if (error) throw error;
+
+        const selectForm = document.getElementById('formSantri');
+        const selectFilter = document.getElementById('filterSantri');
+
+        selectForm.innerHTML = '<option value="">-- Pilih Santri --</option>';
+        selectFilter.innerHTML = '<option value="">-- Semua Santri --</option>';
+
+        data.forEach(s => {
+          listSantriMap[s.id_santri] = s;
+          selectForm.innerHTML += `<option value="${s.id_santri}">${s.nama_santri} (${s.kelas})</option>`;
+          selectFilter.innerHTML += `<option value="${s.id_santri}">${s.nama_santri}</option>`;
+        });
+      } catch (err) {
+        console.error("Gagal memuat list santri:", err);
+      }
+    }
+
+    // READ: Load Data Kartu Prestasi
+    async function loadDataPrestasi() {
+      try {
+        const { data, error } = await db
+          .from('kartu_prestasi')
+          .select('*, santri(nama_santri, kelas)')
+          .order('tanggal', { ascending: false });
+
+        if (error) throw error;
+        listPrestasi = data;
+        renderTabel(listPrestasi);
+      } catch (err) {
+        alert("Gagal memuat data prestasi: " + err.message);
+      }
+    }
+
+    // Render Data ke Tabel
+    function renderTabel(data) {
+      const tbody = document.getElementById('tabelPrestasiBody');
+      const totalSpan = document.getElementById('totalRecords');
+      tbody.innerHTML = '';
+
+      totalSpan.innerText = `${data.length} Data`;
+
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada catatan prestasi santri.</td></tr>`;
+        return;
+      }
+
+      data.forEach(item => {
+        const namaSantri = item.santri ? item.santri.nama_santri : (listSantriMap[item.id_santri]?.nama_santri || 'Santri Terhapus');
+        const kelasSantri = item.santri ? item.santri.kelas : (listSantriMap[item.id_santri]?.kelas || '-');
+
+        // Format Hafalan & Ummi
+        const infoHafalan = item.surat ? `<b>${item.surat}</b> (Ayat ${item.ayat || '-'}) <br><span class="text-xs bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">Nilai: ${item.nilai_hafalan || '-'}</span>` : '<span class="text-slate-400">-</span>';
+        const infoUmmi = item.jilid ? `<b>${item.jilid}</b> Hal. ${item.halaman || '-'} <br><span class="text-xs bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">Materi: ${item.materi_ummi || '-'} | Nilai: ${item.nilai_ummi || '-'}</span>` : '<span class="text-slate-400">-</span>';
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-50 transition-all">
+            <td class="p-3">
+              <span class="font-semibold text-slate-800">${item.tanggal || '-'}</span>
+              <div class="text-slate-400 text-[11px]">TM Ke: ${item.tm_ke || '-'}</div>
+            </td>
+            <td class="p-3">
+              <div class="font-semibold text-slate-800">${namaSantri}</div>
+              <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[10px]">${kelasSantri}</span>
+            </td>
+            <td class="p-3 leading-relaxed">${infoHafalan}</td>
+            <td class="p-3 leading-relaxed">${infoUmmi}</td>
+            <td class="p-3 text-[11px]">
+              <div>Guru: <b>${item.guru_penyimak || '-'}</b></div>
+              <div>Ortu: <b>${item.ortu_penyimak || '-'}</b></div>
+            </td>
+            <td class="p-3 text-center space-x-1">
+              <button onclick="bukaModalEdit(${item.id_prestasi})" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-2 py-1 rounded text-xs">Edit</button>
+              <button onclick="hapusPrestasi(${item.id_prestasi})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded text-xs">Hapus</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // Buka Modal khusus untuk Edit Data
+    function bukaModalEdit(id) {
+      const item = listPrestasi.find(p => p.id_prestasi === id);
+      if (!item) return;
+
+      document.getElementById('editId').value = item.id_prestasi;
+      document.getElementById('formSantri').value = item.id_santri;
+      document.getElementById('formTm').value = item.tm_ke || '';
+      document.getElementById('formTanggal').value = item.tanggal || '';
+
+      document.getElementById('formSurat').value = item.surat || '';
+      document.getElementById('formAyat').value = item.ayat || '';
+      document.getElementById('formNilaiHafalan').value = item.nilai_hafalan || '';
+
+      document.getElementById('formJilid').value = item.jilid || '';
+      document.getElementById('formHalaman').value = item.halaman || '';
+      document.getElementById('formMateri').value = item.materi_ummi || '';
+      document.getElementById('formNilaiUmmi').value = item.nilai_ummi || '';
+
+      document.getElementById('formGuru').value = item.guru_penyimak || '';
+      document.getElementById('formOrtu').value = item.ortu_penyimak || '';
+
+      const modal = document.getElementById('modalForm');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function tutupModal() {
+      const modal = document.getElementById('modalForm');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // UPDATE: Simpan Perubahan Edit
+    document.getElementById('formPrestasi').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const id = document.getElementById('editId').value;
+      if (!id) return;
+
+      const payload = {
+        id_santri: document.getElementById('formSantri').value,
+        tm_ke: document.getElementById('formTm').value ? parseInt(document.getElementById('formTm').value) : null,
+        tanggal: document.getElementById('formTanggal').value,
+        surat: document.getElementById('formSurat').value,
+        ayat: document.getElementById('formAyat').value,
+        nilai_hafalan: document.getElementById('formNilaiHafalan').value,
+        jilid: document.getElementById('formJilid').value,
+        halaman: document.getElementById('formHalaman').value,
+        materi_ummi: document.getElementById('formMateri').value,
+        nilai_ummi: document.getElementById('formNilaiUmmi').value,
+        guru_penyimak: document.getElementById('formGuru').value,
+        ortu_penyimak: document.getElementById('formOrtu').value
+      };
+
+      try {
+        const { error } = await db.from('kartu_prestasi').update(payload).eq('id_prestasi', id);
+        if (error) throw error;
+
+        alert("Catatan prestasi berhasil diperbarui!");
+        tutupModal();
+        loadDataPrestasi();
+      } catch (err) {
+        alert("Gagal memperbarui data: " + err.message);
+      }
+    });
+
+    // DELETE: Hapus Data
+    async function hapusPrestasi(id) {
+      if (!confirm("Apakah Anda yakin ingin menghapus catatan prestasi ini?")) return;
+
+      try {
+        const { error } = await db.from('kartu_prestasi').delete().eq('id_prestasi', id);
+        if (error) throw error;
+
+        alert("Catatan prestasi berhasil dihapus.");
+        loadDataPrestasi();
+      } catch (err) {
+        alert("Gagal menghapus data: " + err.message);
+      }
+    }
+
+    // FILTER & SEARCH
+    function filterData() {
+      const santriId = document.getElementById('filterSantri').value;
+      const keyword = document.getElementById('searchKeyword').value.toLowerCase();
+
+      const filtered = listPrestasi.filter(p => {
+        const matchSantri = !santriId || String(p.id_santri) === String(santriId);
+        const namaSantri = p.santri ? p.santri.nama_santri.toLowerCase() : '';
+        const matchKeyword = !keyword || 
+          (p.surat && p.surat.toLowerCase().includes(keyword)) ||
+          (p.jilid && p.jilid.toLowerCase().includes(keyword)) ||
+          (p.guru_penyimak && p.guru_penyimak.toLowerCase().includes(keyword)) ||
+          namaSantri.includes(keyword);
+
+        return matchSantri && matchKeyword;
+      });
+
+      renderTabel(filtered);
+    }
+
+    // Jalankan inisialisasi saat halaman dibuka
+    init();
+  </script>
+</body>
+</html>
