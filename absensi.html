@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rumah Qur'an Baitul Itqan - Rekap Absensi Santri</title>
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 pb-10">
+
+  <div class="bg-emerald-600 text-white p-3 sticky top-0 shadow-md z-10 flex justify-between items-center">
+    <div class="flex items-center gap-2.5">
+      <img src="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png" alt="Logo RQ Baitul Itqan" class="w-8 h-8 rounded-full bg-white p-0.5 shadow-sm">
+      <div>
+        <h1 class="text-sm sm:text-base font-bold leading-tight">Rumah Qur'an Baitul Itqan</h1>
+        <p class="text-[10px] text-emerald-100 font-medium">📋 Rekap Absensi Kehadiran</p>
+      </div>
+    </div>
+    <a href="index.html" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-500 font-medium">
+      ← Utama
+    </a>
+  </div>
+
+  <div class="max-w-6xl mx-auto p-4 space-y-4">
+
+    <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-100 space-y-3">
+      <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+        <a href="index.html" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium px-4 py-2.5 rounded-lg text-xs flex items-center justify-center gap-1.5 shadow">
+          <span>📋</span> Input Absensi Baru
+        </a>
+
+        <div class="flex flex-wrap sm:flex-nowrap gap-2">
+          <select id="filterKelas" onchange="filterData()" class="text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+            <option value="">-- Semua Kelas --</option>
+          </select>
+          <input type="date" id="filterTanggal" onchange="filterData()" class="text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+          <input type="text" id="searchKeyword" oninput="filterData()" placeholder="Cari nama santri..." class="text-xs p-2.5 border border-slate-300 rounded-lg w-full sm:w-48 focus:ring-2 focus:ring-emerald-500 outline-none">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-2 text-center pt-2 border-t border-slate-100 text-xs">
+        <div class="bg-emerald-50 border border-emerald-200 p-2 rounded-lg">
+          <span class="text-[10px] text-emerald-700 font-bold block uppercase">Hadir (H)</span>
+          <span id="statHadir" class="text-base font-bold text-emerald-800">0</span>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 p-2 rounded-lg">
+          <span class="text-[10px] text-amber-700 font-bold block uppercase">Sakit (S)</span>
+          <span id="statSakit" class="text-base font-bold text-amber-800">0</span>
+        </div>
+        <div class="bg-blue-50 border border-blue-200 p-2 rounded-lg">
+          <span class="text-[10px] text-blue-700 font-bold block uppercase">Izin (I)</span>
+          <span id="statIzin" class="text-base font-bold text-blue-800">0</span>
+        </div>
+        <div class="bg-rose-50 border border-rose-200 p-2 rounded-lg">
+          <span class="text-[10px] text-rose-700 font-bold block uppercase">Alfa (A)</span>
+          <span id="statAlfa" class="text-base font-bold text-rose-800">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between items-center px-1">
+      <h2 class="text-xs font-bold text-slate-600 uppercase tracking-wider">Riwayat Absensi Santri</h2>
+      <button onclick="resetFilter()" class="text-[11px] text-emerald-600 hover:underline font-semibold">Reset Filter</button>
+    </div>
+
+    <div id="mobileCardContainer" class="block md:hidden space-y-3">
+      <div class="p-6 text-center text-slate-400 bg-white rounded-xl border border-slate-100 text-xs">
+        Sedang mengambil data absensi...
+      </div>
+    </div>
+
+    <div class="hidden md:block bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead class="bg-slate-100 border-b font-semibold text-slate-700">
+            <tr>
+              <th class="p-3">Tanggal</th>
+              <th class="p-3">Nama Santri</th>
+              <th class="p-3">Kelas</th>
+              <th class="p-3 text-center">Status Kehadiran</th>
+              <th class="p-3 text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabelAbsensiBody" class="divide-y text-slate-600">
+            <tr>
+              <td colspan="5" class="p-4 text-center text-slate-400">Sedang mengambil data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="modalEdit" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-xl shadow-lg p-5 max-w-sm w-full space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-sm font-bold text-slate-800">✏️ Edit Status Absensi</h3>
+        <button onclick="tutupModalEdit()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+      </div>
+      
+      <form id="formEditAbsen" class="space-y-3 text-xs">
+        <input type="hidden" id="editIdAbsen">
+        <div>
+          <label class="block font-medium text-slate-600 mb-1">Nama Santri</label>
+          <input type="text" id="editNamaSantri" disabled class="w-full p-2.5 border border-slate-200 rounded-lg bg-slate-100 font-semibold text-slate-700">
+        </div>
+        <div>
+          <label class="block font-medium text-slate-600 mb-1">Tanggal Absen</label>
+          <input type="date" id="editTanggal" required class="w-full p-2.5 border border-slate-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block font-medium text-slate-600 mb-1">Status Kehadiran</label>
+          <select id="editStatus" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-white">
+            <option value="Hadir">Hadir (H)</option>
+            <option value="Sakit">Sakit (S)</option>
+            <option value="Izin">Izin (I)</option>
+            <option value="Alfa">Alfa (A)</option>
+          </select>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t">
+          <button type="button" onclick="tutupModalEdit()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg font-medium">Batal</button>
+          <button type="submit" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ SESUAIKAN DENGAN API URL & ANON KEY SUPABASE ANDA
+    const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; 
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; 
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let listAbsensi = [];
+    let listSantriMap = {};
+
+    async function init() {
+      await loadOptionsSantri();
+      await loadDataAbsensi();
+    }
+
+    // Load daftar santri untuk pemetaan ID ke Nama & Dropdown Kelas
+    async function loadOptionsSantri() {
+      try {
+        const { data, error } = await db.from('santri').select('*').order('nama_santri');
+        if (error) throw error;
+
+        const selectFilterKelas = document.getElementById('filterKelas');
+        selectFilterKelas.innerHTML = '<option value="">-- Semua Kelas --</option>';
+
+        const daftarKelas = [...new Set(data.map(s => s.kelas))].filter(Boolean);
+
+        data.forEach(s => {
+          listSantriMap[s.id_santri] = s;
+        });
+
+        daftarKelas.forEach(kelas => {
+          selectFilterKelas.innerHTML += `<option value="${kelas}">${kelas}</option>`;
+        });
+      } catch (err) {
+        console.error("Gagal memuat list santri:", err);
+      }
+    }
+
+    // READ: Load Data Absensi dari Supabase
+    async function loadDataAbsensi() {
+      try {
+        const { data, error } = await db
+          .from('absensi')
+          .select('*, santri(nama_santri, kelas)')
+          .order('tanggal', { ascending: false });
+
+        if (error) throw error;
+        listAbsensi = data;
+        renderTampilan(listAbsensi);
+      } catch (err) {
+        alert("Gagal memuat data absensi: " + err.message);
+      }
+    }
+
+    // Render Tampilan Card (Mobile) & Table (Desktop)
+    function renderTampilan(data) {
+      const mobileContainer = document.getElementById('mobileCardContainer');
+      const tableBody = document.getElementById('tabelAbsensiBody');
+      
+      mobileContainer.innerHTML = '';
+      tableBody.innerHTML = '';
+
+      // Hitung Statistik
+      let h = 0, s = 0, i = 0, a = 0;
+      data.forEach(item => {
+        const st = (item.status || '').toLowerCase();
+        if (st === 'hadir') h++;
+        else if (st === 'sakit') s++;
+        else if (st === 'izin') i++;
+        else if (st === 'alfa') a++;
+      });
+
+      document.getElementById('statHadir').innerText = h;
+      document.getElementById('statSakit').innerText = s;
+      document.getElementById('statIzin').innerText = i;
+      document.getElementById('statAlfa').innerText = a;
+
+      if (data.length === 0) {
+        const emptyState = `<div class="p-6 text-center text-slate-400 bg-white rounded-xl border border-slate-100 text-xs">Belum ada riwayat absensi.</div>`;
+        mobileContainer.innerHTML = emptyState;
+        tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada riwayat absensi.</td></tr>`;
+        return;
+      }
+
+      data.forEach(item => {
+        const namaSantri = item.santri ? item.santri.nama_santri : (listSantriMap[item.id_santri]?.nama_santri || 'Santri Terhapus');
+        const kelasSantri = item.santri ? item.santri.kelas : (listSantriMap[item.id_santri]?.kelas || '-');
+
+        // Formatter Status Badge
+        let badgeStatus = '';
+        const st = (item.status || 'Hadir');
+        if (st === 'Hadir') {
+          badgeStatus = `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[11px] font-bold">✓ Hadir</span>`;
+        } else if (st === 'Sakit') {
+          badgeStatus = `<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold">😷 Sakit</span>`;
+        } else if (st === 'Izin') {
+          badgeStatus = `<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[11px] font-bold">✉️ Izin</span>`;
+        } else {
+          badgeStatus = `<span class="bg-rose-100 text-rose-800 px-2 py-0.5 rounded text-[11px] font-bold">❌ Alfa</span>`;
+        }
+
+        // 1. RENDER CARD MOBILE
+        mobileContainer.innerHTML += `
+          <div class="bg-white rounded-xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between gap-2">
+            <div class="space-y-1">
+              <h3 class="font-bold text-xs text-slate-800">${namaSantri}</h3>
+              <div class="flex items-center gap-2 text-[10px] text-slate-500">
+                <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-medium">${kelasSantri}</span>
+                <span>📅 ${item.tanggal || '-'}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <div>${badgeStatus}</div>
+              <button onclick="bukaModalEdit(${item.id_absen})" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-1.5 rounded-lg text-xs" title="Edit">✏️</button>
+              <button onclick="hapusAbsen(${item.id_absen})" class="bg-rose-50 hover:bg-rose-100 text-rose-600 p-1.5 rounded-lg text-xs" title="Hapus">🗑️</button>
+            </div>
+          </div>
+        `;
+
+        // 2. RENDER TABEL DESKTOP
+        tableBody.innerHTML += `
+          <tr class="hover:bg-slate-50 transition-all">
+            <td class="p-3 font-semibold text-slate-800">${item.tanggal || '-'}</td>
+            <td class="p-3 font-semibold text-slate-800">${namaSantri}</td>
+            <td class="p-3"><span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[11px] font-medium">${kelasSantri}</span></td>
+            <td class="p-3 text-center">${badgeStatus}</td>
+            <td class="p-3 text-center space-x-1">
+              <button onclick="bukaModalEdit(${item.id_absen})" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-2 py-1 rounded text-xs">Edit</button>
+              <button onclick="hapusAbsen(${item.id_absen})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded text-xs">Hapus</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // UPDATE: Modal Handlers
+    function bukaModalEdit(id) {
+      const item = listAbsensi.find(a => a.id_absen === id);
+      if (!item) return;
+
+      const namaSantri = item.santri ? item.santri.nama_santri : (listSantriMap[item.id_santri]?.nama_santri || 'Santri');
+
+      document.getElementById('editIdAbsen').value = item.id_absen;
+      document.getElementById('editNamaSantri').value = namaSantri;
+      document.getElementById('editTanggal').value = item.tanggal || '';
+      document.getElementById('editStatus').value = item.status || 'Hadir';
+
+      const modal = document.getElementById('modalEdit');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function tutupModalEdit() {
+      const modal = document.getElementById('modalEdit');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    document.getElementById('formEditAbsen').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('editIdAbsen').value;
+      const tanggal = document.getElementById('editTanggal').value;
+      const status = document.getElementById('editStatus').value;
+
+      try {
+        const { error } = await db.from('absensi').update({ tanggal, status }).eq('id_absen', id);
+        if (error) throw error;
+
+        alert("Data absensi berhasil diperbarui!");
+        tutupModalEdit();
+        loadDataAbsensi();
+      } catch (err) {
+        alert("Gagal memperbarui absensi: " + err.message);
+      }
+    });
+
+    // DELETE: Hapus Absensi
+    async function hapusAbsen(id) {
+      if (!confirm("Apakah Anda yakin ingin menghapus data absensi ini?")) return;
+
+      try {
+        const { error } = await db.from('absensi').delete().eq('id_absen', id);
+        if (error) throw error;
+
+        alert("Data absensi berhasil dihapus.");
+        loadDataAbsensi();
+      } catch (err) {
+        alert("Gagal menghapus absensi: " + err.message);
+      }
+    }
+
+    // FILTER & SEARCH
+    function filterData() {
+      const kelas = document.getElementById('filterKelas').value;
+      const tanggal = document.getElementById('filterTanggal').value;
+      const keyword = document.getElementById('searchKeyword').value.toLowerCase();
+
+      const filtered = listAbsensi.filter(a => {
+        const kelasSantri = a.santri ? a.santri.kelas : (listSantriMap[a.id_santri]?.kelas || '');
+        const namaSantri = a.santri ? a.santri.nama_santri.toLowerCase() : (listSantriMap[a.id_santri]?.nama_santri.toLowerCase() || '');
+
+        const matchKelas = !kelas || kelasSantri === kelas;
+        const matchTanggal = !tanggal || a.tanggal === tanggal;
+        const matchKeyword = !keyword || namaSantri.includes(keyword);
+
+        return matchKelas && matchTanggal && matchKeyword;
+      });
+
+      renderTampilan(filtered);
+    }
+
+    function resetFilter() {
+      document.getElementById('filterKelas').value = '';
+      document.getElementById('filterTanggal').value = '';
+      document.getElementById('searchKeyword').value = '';
+      renderTampilan(listAbsensi);
+    }
+
+    init();
+  </script>
+</body>
+</html>
