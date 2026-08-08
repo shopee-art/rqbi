@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rumah Quran - Input Prestasi</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800">
 
@@ -182,10 +183,15 @@
   </div>
 
   <script>
-    // URL Web App Google Apps Script
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxs-v522s6pFMahkHeiAQ8JZg6ux_3I8LheLvICjMS1JxASRpkcXcQeFaEzgmTwgH8J-Q/exec";
+    // ⚠️ GANTI DENGAN API URL & ANON KEY SUPABASE ANDA
+    const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; // 
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; // 
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Daftar 114 Surah Al-Qur'an
+    // ⚠️ GANTI DENGAN URL GITHUB PAGES ANDA (Termasuk nama repo)
+    const BASE_URL_GITHUB = "https://shopee-art.github.io/rqbi/"; // 
+
+    // Daftar 114 Surah Al-Qur'an 
     const daftarSurat = [
       "Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Taubah", "Yunus",
       "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra'", "Al-Kahf", "Maryam", "Tha-Ha",
@@ -206,7 +212,7 @@
     // Set tanggal default ke hari ini
     document.getElementById('tanggal').value = new Date().toISOString().substring(0, 10);
 
-    // Populate Dropdown Surat
+    // Populate Dropdown Surat 
     function populateSurat() {
       const selectSurat = document.getElementById('hafalan_surat');
       daftarSurat.forEach((surat, index) => {
@@ -214,14 +220,15 @@
       });
     }
 
-    // Load Data Santri & Ekstrak Daftar Kelas
+    // Load Data Santri & Filter Kelas dari Supabase
     async function loadSantri() {
       try {
-        const res = await fetch(`${GAS_URL}?sheet=santri`);
-        const json = await res.json();
-        globalDataSantri = json.data;
+        const { data, error } = await db.from('santri').select('*');
+        if (error) throw error;
 
-        // Ambil daftar kelas unik
+        globalDataSantri = data;
+
+        // Ambil daftar kelas unik 
         const daftarKelas = [...new Set(globalDataSantri.map(s => s.kelas))].filter(Boolean);
         
         const selectKelas = document.getElementById('filter_kelas');
@@ -231,11 +238,11 @@
         });
 
       } catch (err) {
-        alert("Gagal memuat data santri");
+        alert("Gagal memuat data santri dari Supabase: " + err.message);
       }
     }
 
-    // Sisipkan karakter hijaiyah ke posisi kursor aktif
+    // Sisipkan karakter hijaiyah ke posisi kursor aktif [cite: 85, 89]
     function insertHijaiyah(char) {
       const input = document.getElementById('ummi_materi');
       const start = input.selectionStart;
@@ -247,7 +254,7 @@
       input.focus();
     }
 
-    // Event Listener Filter Santri berdasarkan Kelas
+    // Event Listener Filter Santri berdasarkan Kelas 
     document.getElementById('filter_kelas').addEventListener('change', (e) => {
       const kelasDipilih = e.target.value;
       const selectSantri = document.getElementById('id_santri');
@@ -267,7 +274,7 @@
       selectSantri.disabled = false;
     });
 
-    // Event Submit Form & Pemicu WA
+    // Event Submit Form ke Supabase & Pemicu WA [cite: 102, 105]
     document.getElementById('formPrestasi').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btnSubmit');
@@ -275,8 +282,8 @@
       btn.disabled = true;
 
       const payload = {
-        id_santri: document.getElementById('id_santri').value,
-        tm_ke: document.getElementById('tm_ke').value,
+        id_santri: parseInt(document.getElementById('id_santri').value),
+        tm_ke: parseInt(document.getElementById('tm_ke').value),
         tanggal: document.getElementById('tanggal').value,
         hafalan_surat: document.getElementById('hafalan_surat').value,
         hafalan_ayat: document.getElementById('hafalan_ayat').value,
@@ -286,42 +293,39 @@
         ummi_materi: document.getElementById('ummi_materi').value,
         ummi_nilai: document.getElementById('ummi_nilai').value,
         disimak_guru: document.getElementById('disimak_guru').value,
-        disimak_ortu: "Pending" // Nilai default konfirmasi ortu
+        disimak_ortu: "Pending" // Nilai default konfirmasi ortu [cite: 103]
       };
 
       try {
-        const response = await fetch(GAS_URL, {
-          method: "POST",
-          body: JSON.stringify({ targetSheet: "kartu_prestasi", payload: payload })
-        });
-        
-        const result = await response.json();
+        // Simpan ke Supabase dan kembalikan baris yang baru terbuat
+        const { data, error } = await db.from('kartu_prestasi').insert([payload]).select();
 
-        // Cari data santri terpilih untuk mengambil Nama & Nomor HP Ortu
+        if (error) throw error;
+
+        const idBaru = data[0].id_prestasi;
         const santriTerpilih = globalDataSantri.find(s => s.id_santri == payload.id_santri);
         const noHpOrtu = santriTerpilih ? santriTerpilih.no_hp_ortu : "";
         const namaSantri = santriTerpilih ? santriTerpilih.nama_santri : "Santri";
 
-        // Buat Link Khusus Konfirmasi untuk Ortu
-        const idGenerated = result.id_generated || new Date().getTime(); // fallback jika ID belum dikembalikan
-        const linkKonfirmasi = `${GAS_URL}?action=confirm_ortu&id=${idGenerated}`;
+        // Link konfirmasi mengarah ke konfirmasi.html di GitHub Pages 
+        const linkKonfirmasi = `${BASE_URL_GITHUB}/konfirmasi.html?id=${idBaru}`;
 
-        // Format Draf Pesan WA
+        // Format Pesan WA [cite: 105, 134]
         const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nBerikut ringkasan setoran hari ini:\n- Hafalan: ${payload.hafalan_surat || '-'} (${payload.hafalan_ayat || '-'})\n- Ummi: ${payload.ummi_jilid || '-'} Hal. ${payload.ummi_halaman || '-'}\n\nMohon disimak kembali di rumah, lalu klik link di bawah ini untuk konfirmasi:\n${linkKonfirmasi}\n\nJazakumullah khair.`;
 
-        // Tanya Ustadzah untuk langsung kirim WA
-        if (confirm("Data prestasi berhasil disimpan! Kirimkan pesan konfirmasi ke WhatsApp Orang Tua sekarang?")) {
+        // Picu Aplikasi WhatsApp Bawaan HP [cite: 105, 129]
+        if (confirm("Data prestasi berhasil disimpan ke Supabase! Kirimkan pesan konfirmasi ke WhatsApp Orang Tua sekarang?")) {
           const waUrl = `https://wa.me/${noHpOrtu}?text=${encodeURIComponent(teksPesan)}`;
           window.open(waUrl, '_blank');
         }
 
-        // Reset form setelah simpan
+        // Reset Form
         document.getElementById('formPrestasi').reset();
         document.getElementById('id_santri').disabled = true;
         document.getElementById('tanggal').value = new Date().toISOString().substring(0, 10);
 
       } catch (err) {
-        alert("Gagal menyimpan data prestasi!");
+        alert("Gagal menyimpan data ke Supabase: " + err.message);
       } finally {
         btn.innerText = "Simpan Data";
         btn.disabled = false;
