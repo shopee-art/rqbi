@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rumah Quran - Input Prestasi & Absens</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800">
+
+  <div class="bg-emerald-600 text-white p-4 sticky top-0 shadow-md z-10">
+    <h1 class="text-lg font-bold text-center">📖 Kartu Prestasi Santri</h1>
+  </div>
+
+  <div class="max-w-md mx-auto p-4">
+    <form id="formPrestasi" class="bg-white rounded-xl shadow-sm p-5 space-y-4 border border-slate-100">
+      
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Santri</label>
+        <select id="id_santri" required class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+          <option value="">-- Memuat Data Santri... --</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">TM Ke-</label>
+          <input type="number" id="tm_ke" required placeholder="Contoh: 12" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal</label>
+          <input type="date" id="tanggal" required class="w-full border rounded-lg p-2.5 text-sm outline-none">
+        </div>
+      </div>
+
+      <hr class="border-dashed my-2">
+
+      <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Setoran Hafalan</p>
+      <div class="grid grid-cols-2 gap-3">
+        <input type="text" id="hafalan_surat" placeholder="Nama Surat" class="border rounded-lg p-2.5 text-sm outline-none">
+        <input type="text" id="hafalan_ayat" placeholder="Ayat (cth: 1-15)" class="border rounded-lg p-2.5 text-sm outline-none">
+      </div>
+      <input type="text" id="hafalan_nilai" placeholder="Nilai (cth: A / Mumtaz)" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      <hr class="border-dashed my-2">
+
+      <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Metode Ummi</p>
+      <div class="grid grid-cols-2 gap-3">
+        <input type="text" id="ummi_jilid" placeholder="Jilid / Al-Quran" class="border rounded-lg p-2.5 text-sm outline-none">
+        <input type="text" id="ummi_halaman" placeholder="Halaman" class="border rounded-lg p-2.5 text-sm outline-none">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <input type="text" id="ummi_materi" placeholder="Materi / Pokok" class="border rounded-lg p-2.5 text-sm outline-none">
+        <input type="text" id="ummi_nilai" placeholder="Nilai / Predikat" class="border rounded-lg p-2.5 text-sm outline-none">
+      </div>
+
+      <hr class="border-dashed my-2">
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Disimak Oleh (Guru)</label>
+        <input type="text" id="disimak_guru" required placeholder="Nama Ustadz/Ustadzah" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+      </div>
+
+      <button type="submit" id="btnSubmit" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium py-3 rounded-lg shadow mt-2">
+        Simpan Data
+      </button>
+
+    </form>
+  </div>
+
+  <script>
+    // GANTI DENGAN URL GOOGLE APPS SCRIPT ANDA
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwiqj4jGEZqMM51QWjL8HuJmpcVCIBTPkFA4yeVQoiJ7GGSgTOSqtf1sWFQNHOs--7bDA/exec";
+
+    // Set tanggal default ke hari ini
+    document.getElementById('tanggal').valueToDate = new Date();
+    document.getElementById('tanggal').value = new Date().toISOString().substring(0, 10);
+
+    // Fetch daftar santri saat halaman dibuka
+    async function loadSantri() {
+      try {
+        const res = await fetch(`${GAS_URL}?sheet=santri`);
+        const json = await res.json();
+        const select = document.getElementById('id_santri');
+        select.innerHTML = '<option value="">-- Pilih Santri --</option>';
+        
+        json.data.forEach(santri => {
+          select.innerHTML += `<option value="${santri.id_santri}">${santri.nama_santri} (${santri.kelas})</option>`;
+        });
+      } catch (err) {
+        alert("Gagal memuat daftar santri");
+      }
+    }
+
+    // Kirim Form ke Google Apps Script
+    document.getElementById('formPrestasi').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmit');
+      btn.innerText = "Lagi menyimpan...";
+      btn.disabled = true;
+
+      const payload = {
+        id_santri: document.getElementById('id_santri').value,
+        tm_ke: document.getElementById('tm_ke').value,
+        tanggal: document.getElementById('tanggal').value,
+        hafalan_surat: document.getElementById('hafalan_surat').value,
+        hafalan_ayat: document.getElementById('hafalan_ayat').value,
+        hafalan_nilai: document.getElementById('hafalan_nilai').value,
+        ummi_jilid: document.getElementById('ummi_jilid').value,
+        ummi_halaman: document.getElementById('ummi_halaman').value,
+        ummi_materi: document.getElementById('ummi_materi').value,
+        ummi_nilai: document.getElementById('ummi_nilai').value,
+        disimak_guru: document.getElementById('disimak_guru').value,
+        disimak_ortu: "-"
+      };
+
+      try {
+        await fetch(GAS_URL, {
+          method: "POST",
+          body: JSON.stringify({ targetSheet: "kartu_prestasi", payload: payload })
+        });
+        alert("Data berhasil disimpan ke Google Sheets!");
+        document.getElementById('formPrestasi').reset();
+      } catch (err) {
+        alert("Gagal menyimpan data!");
+      } finally {
+        btn.innerText = "Simpan Data";
+        btn.disabled = false;
+      }
+    });
+
+    loadSantri();
+  </script>
+</body>
+</html>
