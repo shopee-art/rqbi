@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rumah Qur'an Baitul Itqan - Input Prestasi</title>
+  <title>Rumah Qur'an Baitul Itqan - Input Prestasi & Absensi</title>
   <link rel="icon" type="image/png" href="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800">
+<body class="bg-slate-50 font-sans text-slate-800 pb-10">
 
   <div class="bg-emerald-600 text-white p-3 sticky top-0 shadow-md z-10 flex items-center justify-center gap-3">
     <img src="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png" alt="Logo RQ Baitul Itqan" class="w-8 h-8 rounded-full bg-white p-0.5 shadow-sm">
     <div class="text-center">
       <h1 class="text-base font-bold leading-tight">Rumah Qur'an Baitul Itqan</h1>
-      <p class="text-[11px] text-emerald-100 font-medium">📖 Kartu Prestasi Santri</p>
+      <p class="text-[11px] text-emerald-100 font-medium">Aplikasi Prestasi & Absensi Santri</p>
     </div>
   </div>
 
-  <div class="max-w-md mx-auto p-4">
-    <div class="flex justify-between items-center mb-4 text-xs font-medium">
+  <div class="max-w-md mx-auto p-4 space-y-4">
+    
+    <div class="flex justify-between items-center text-xs font-medium">
       <a href="santri.html" class="bg-white hover:bg-slate-100 text-emerald-700 px-3 py-2 rounded-lg border border-slate-200 shadow-sm flex items-center gap-1.5 transition-all">
         <span>👥</span> Kelola Santri
       </a>
@@ -28,172 +29,223 @@
       </a>
     </div>
 
-    <form id="formPrestasi" class="bg-white rounded-xl shadow-sm p-5 space-y-4 border border-slate-100">
-      
-      <div class="space-y-3">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Kelas</label>
-          <select id="filter_kelas" required class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
-            <option value="">-- Memuat Kelas... --</option>
-          </select>
+    <div class="bg-slate-200 p-1 rounded-xl flex text-xs font-bold">
+      <button id="tabBtnPrestasi" onclick="switchTab('prestasi')" class="w-1/2 py-2.5 rounded-lg bg-white text-emerald-700 shadow-sm transition-all text-center">
+        📖 Input Prestasi
+      </button>
+      <button id="tabBtnAbsensi" onclick="switchTab('absensi')" class="w-1/2 py-2.5 rounded-lg text-slate-600 hover:text-slate-800 transition-all text-center">
+        📋 Absensi Kelas
+      </button>
+    </div>
+
+    <div id="tabPrestasi" class="space-y-4">
+      <form id="formPrestasi" class="bg-white rounded-xl shadow-sm p-5 space-y-4 border border-slate-100">
+        
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Kelas</label>
+            <select id="filter_kelas" required class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+              <option value="">-- Memuat Kelas... --</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Santri</label>
+            <select id="id_santri" required disabled class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none disabled:bg-slate-200">
+              <option value="">-- Pilih Kelas Terlebih Dahulu --</option>
+            </select>
+          </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Santri</label>
-          <select id="id_santri" required disabled class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none disabled:bg-slate-200">
-            <option value="">-- Pilih Kelas Terlebih Dahulu --</option>
-          </select>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">TM Ke-</label>
+            <input type="number" id="tm_ke" required placeholder="Contoh: 12" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal</label>
+            <input type="date" id="tanggal" required class="w-full border rounded-lg p-2.5 text-sm outline-none">
+          </div>
         </div>
-      </div>
 
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">TM Ke-</label>
-          <input type="number" id="tm_ke" required placeholder="Contoh: 12" class="w-full border rounded-lg p-2.5 text-sm outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal</label>
-          <input type="date" id="tanggal" required class="w-full border rounded-lg p-2.5 text-sm outline-none">
-        </div>
-      </div>
+        <hr class="border-dashed my-2">
 
-      <hr class="border-dashed my-2">
-
-      <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Setoran Hafalan</p>
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <select id="hafalan_surat" class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
-            <option value="">-- Pilih Surat --</option>
-          </select>
+        <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Setoran Hafalan</p>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <select id="hafalan_surat" class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
+              <option value="">-- Pilih Surat --</option>
+            </select>
+          </div>
+          <div>
+            <input type="text" id="hafalan_ayat" placeholder="Ayat (cth: 1-15)" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+          </div>
         </div>
+        
         <div>
-          <input type="text" id="hafalan_ayat" placeholder="Ayat (cth: 1-15)" class="w-full border rounded-lg p-2.5 text-sm outline-none">
-        </div>
-      </div>
-      
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1">Nilai Hafalan</label>
-        <input 
-          type="text" 
-          id="hafalan_nilai" 
-          placeholder="Masukkan Nilai (cth: 90)" 
-          class="w-full border rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
-        >
-      </div>
-
-      <hr class="border-dashed my-2">
-
-      <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Metode Ummi</p>
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <select id="ummi_jilid" class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
-            <option value="">-- Pilih Jilid/Qur'an --</option>
-            <option value="Jilid 1">Jilid 1</option>
-            <option value="Jilid 2">Jilid 2</option>
-            <option value="Jilid 3">Jilid 3</option>
-            <option value="Jilid 4">Jilid 4</option>
-            <option value="Jilid 5">Jilid 5</option>
-            <option value="Jilid 6">Jilid 6</option>
-            <option value="Ghorib">Ghorib</option>
-            <option value="Tajwid">Tajwid</option>
-            <option value="Al Qur'an">Al Qur'an</option>
-          </select>
-        </div>
-        <div>
-          <input type="text" id="ummi_halaman" placeholder="Halaman" class="w-full border rounded-lg p-2.5 text-sm outline-none">
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-3">
-        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Nilai Hafalan</label>
           <input 
             type="text" 
-            id="ummi_materi" 
-            placeholder="Materi / Pokok (cth: Mad Jaiz / 👈 klik tombol)" 
+            id="hafalan_nilai" 
+            placeholder="Masukkan Nilai (cth: 90)" 
             class="w-full border rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
           >
-          
-          <div class="mt-2 bg-slate-100 p-2.5 rounded-lg border border-slate-200 space-y-2">
-            <div>
-              <span class="text-[10px] text-slate-500 font-bold block mb-1">HARAKAT:</span>
-              <div class="flex flex-wrap gap-1">
-                <button type="button" onclick="insertHijaiyah(' َ')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">َ (Fathah)</button>
-                <button type="button" onclick="insertHijaiyah(' ِ')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">ِ (Kasrah)</button>
-                <button type="button" onclick="insertHijaiyah(' ُ')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">ُ (Dhammah)</button>
-                <button type="button" onclick="insertHijaiyah(' ً')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">ً (Tanwin)</button>
-                <button type="button" onclick="insertHijaiyah(' ْ')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">ْ (Sukun)</button>
-                <button type="button" onclick="insertHijaiyah(' ّ')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">ّ (Tasydid)</button>
+        </div>
+
+        <hr class="border-dashed my-2">
+
+        <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Metode Ummi</p>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <select id="ummi_jilid" class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
+              <option value="">-- Pilih Jilid/Qur'an --</option>
+              <option value="Jilid 1">Jilid 1</option>
+              <option value="Jilid 2">Jilid 2</option>
+              <option value="Jilid 3">Jilid 3</option>
+              <option value="Jilid 4">Jilid 4</option>
+              <option value="Jilid 5">Jilid 5</option>
+              <option value="Jilid 6">Jilid 6</option>
+              <option value="Ghorib">Ghorib</option>
+              <option value="Tajwid">Tajwid</option>
+              <option value="Al Qur'an">Al Qur'an</option>
+            </select>
+          </div>
+          <div>
+            <input type="text" id="ummi_halaman" placeholder="Halaman" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <input 
+              type="text" 
+              id="ummi_materi" 
+              placeholder="Materi / Pokok (cth: Mad Jaiz / 👈 klik tombol)" 
+              class="w-full border rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
+            >
+            
+            <div class="mt-2 bg-slate-100 p-2.5 rounded-lg border border-slate-200 space-y-2">
+              <div>
+                <span class="text-[10px] text-slate-500 font-bold block mb-1">HARAKAT:</span>
+                <div class="flex flex-wrap gap-1">
+                  <button type="button" onclick="insertHijaiyah(' َ')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">َ (Fathah)</button>
+                  <button type="button" onclick="insertHijaiyah(' ِ')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">ِ (Kasrah)</button>
+                  <button type="button" onclick="insertHijaiyah(' ُ')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">ُ (Dhammah)</button>
+                  <button type="button" onclick="insertHijaiyah(' ً')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">ً (Tanwin)</button>
+                  <button type="button" onclick="insertHijaiyah(' ْ')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">ْ (Sukun)</button>
+                  <button type="button" onclick="insertHijaiyah(' ّ')" class="px-2 py-1 bg-white hover:bg-emerald-100 border rounded text-xs font-bold active:bg-emerald-200">ّ (Tasydid)</button>
+                </div>
+              </div>
+
+              <div>
+                <span class="text-[10px] text-slate-500 font-bold block mb-1">HURUF HIJAIYAH (30):</span>
+                <div class="flex flex-wrap gap-1 justify-start" style="direction: rtl;">
+                  <button type="button" onclick="insertHijaiyah('ا')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ا</button>
+                  <button type="button" onclick="insertHijaiyah('ب')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ب</button>
+                  <button type="button" onclick="insertHijaiyah('ت')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ت</button>
+                  <button type="button" onclick="insertHijaiyah('ث')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ث</button>
+                  <button type="button" onclick="insertHijaiyah('ج')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ج</button>
+                  <button type="button" onclick="insertHijaiyah('ح')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ح</button>
+                  <button type="button" onclick="insertHijaiyah('خ')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">خ</button>
+                  <button type="button" onclick="insertHijaiyah('د')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">د</button>
+                  <button type="button" onclick="insertHijaiyah('ذ')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ذ</button>
+                  <button type="button" onclick="insertHijaiyah('ر')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ر</button>
+                  <button type="button" onclick="insertHijaiyah('ز')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ز</button>
+                  <button type="button" onclick="insertHijaiyah('س')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">س</button>
+                  <button type="button" onclick="insertHijaiyah('ش')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ش</button>
+                  <button type="button" onclick="insertHijaiyah('ص')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ص</button>
+                  <button type="button" onclick="insertHijaiyah('ض')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ض</button>
+                  <button type="button" onclick="insertHijaiyah('ط')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ط</button>
+                  <button type="button" onclick="insertHijaiyah('ظ')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ظ</button>
+                  <button type="button" onclick="insertHijaiyah('ع')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ع</button>
+                  <button type="button" onclick="insertHijaiyah('غ')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">غ</button>
+                  <button type="button" onclick="insertHijaiyah('ف')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ف</button>
+                  <button type="button" onclick="insertHijaiyah('ق')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ق</button>
+                  <button type="button" onclick="insertHijaiyah('ك')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ك</button>
+                  <button type="button" onclick="insertHijaiyah('ل')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ل</button>
+                  <button type="button" onclick="insertHijaiyah('م')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">م</button>
+                  <button type="button" onclick="insertHijaiyah('ن')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ن</button>
+                  <button type="button" onclick="insertHijaiyah('و')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">و</button>
+                  <button type="button" onclick="insertHijaiyah('هـ')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">هـ</button>
+                  <button type="button" onclick="insertHijaiyah('ء')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ء</button>
+                  <button type="button" onclick="insertHijaiyah('لا')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">لا</button>
+                  <button type="button" onclick="insertHijaiyah('ي')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ي</button>
+                </div>
               </div>
             </div>
+          </div>
 
-            <div>
-              <span class="text-[10px] text-slate-500 font-bold block mb-1">HURUF HIJAIYAH (30):</span>
-              <div class="flex flex-wrap gap-1 justify-start" style="direction: rtl;">
-                <button type="button" onclick="insertHijaiyah('ا')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ا</button>
-                <button type="button" onclick="insertHijaiyah('ب')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ب</button>
-                <button type="button" onclick="insertHijaiyah('ت')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ت</button>
-                <button type="button" onclick="insertHijaiyah('ث')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ث</button>
-                <button type="button" onclick="insertHijaiyah('ج')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ج</button>
-                <button type="button" onclick="insertHijaiyah('ح')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ح</button>
-                <button type="button" onclick="insertHijaiyah('خ')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">خ</button>
-                <button type="button" onclick="insertHijaiyah('د')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">د</button>
-                <button type="button" onclick="insertHijaiyah('ذ')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ذ</button>
-                <button type="button" onclick="insertHijaiyah('ر')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ر</button>
-                <button type="button" onclick="insertHijaiyah('ز')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ز</button>
-                <button type="button" onclick="insertHijaiyah('س')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">س</button>
-                <button type="button" onclick="insertHijaiyah('ش')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ش</button>
-                <button type="button" onclick="insertHijaiyah('ص')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ص</button>
-                <button type="button" onclick="insertHijaiyah('ض')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ض</button>
-                <button type="button" onclick="insertHijaiyah('ط')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ط</button>
-                <button type="button" onclick="insertHijaiyah('ظ')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ظ</button>
-                <button type="button" onclick="insertHijaiyah('ع')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ع</button>
-                <button type="button" onclick="insertHijaiyah('غ')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">غ</button>
-                <button type="button" onclick="insertHijaiyah('ف')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ف</button>
-                <button type="button" onclick="insertHijaiyah('ق')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ق</button>
-                <button type="button" onclick="insertHijaiyah('ك')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ك</button>
-                <button type="button" onclick="insertHijaiyah('ل')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ل</button>
-                <button type="button" onclick="insertHijaiyah('م')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">م</button>
-                <button type="button" onclick="insertHijaiyah('ن')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ن</button>
-                <button type="button" onclick="insertHijaiyah('و')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">و</button>
-                <button type="button" onclick="insertHijaiyah('هـ')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">هـ</button>
-                <button type="button" onclick="insertHijaiyah('ء')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ء</button>
-                <button type="button" onclick="insertHijaiyah('لا')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">لا</button>
-                <button type="button" onclick="insertHijaiyah('ي')" class="w-8 h-8 bg-white hover:bg-emerald-100 border rounded text-base font-bold shadow-sm active:bg-emerald-200">ي</button>
-              </div>
+          <div>
+            <select id="ummi_nilai" class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
+              <option value="">-- Nilai Ummi --</option>
+              <option value="A+">A+</option>
+              <option value="A">A</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B">B</option>
+              <option value="B-">B-</option>
+              <option value="C+">C+</option>
+            </select>
+          </div>
+        </div>
+
+        <hr class="border-dashed my-2">
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Disimak Oleh (Guru)</label>
+          <select id="disimak_guru" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
+            <option value="">-- Pilih Ustadzah --</option>
+            <option value="Ustadzah Salamah">Ustadzah Salamah</option>
+            <option value="Ustadzah Rosianah">Ustadzah Rosianah</option>
+          </select>
+        </div>
+
+        <button type="submit" id="btnSubmit" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium py-3 rounded-lg shadow mt-2">
+          Simpan Data
+        </button>
+
+      </form>
+    </div>
+
+    <div id="tabAbsensi" class="hidden space-y-4">
+      <div class="bg-white rounded-xl shadow-sm p-5 space-y-4 border border-slate-100">
+        
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Kelas</label>
+            <select id="absen_filter_kelas" onchange="renderDaftarAbsenSantri()" class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+              <option value="">-- Pilih Kelas --</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Absen</label>
+            <input type="date" id="absen_tanggal" class="w-full border rounded-lg p-2.5 text-sm outline-none">
+          </div>
+        </div>
+
+        <hr class="border-dashed my-1">
+
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-slate-700">Daftar Kehadiran Santri:</span>
+            <span id="absenCountInfo" class="text-[11px] text-slate-500">0 Santri</span>
+          </div>
+
+          <div id="containerAbsenSantri" class="space-y-2 max-h-80 overflow-y-auto pr-1">
+            <div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-lg">
+              Pilih kelas terlebih dahulu untuk menampilkan daftar santri.
             </div>
           </div>
         </div>
 
-        <div>
-          <select id="ummi_nilai" class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
-            <option value="">-- Nilai Ummi --</option>
-            <option value="A+">A+</option>
-            <option value="A">A</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B">B</option>
-            <option value="B-">B-</option>
-            <option value="C+">C+</option>
-          </select>
-        </div>
+        <button type="button" id="btnSimpanAbsen" onclick="simpanAbsensiMasal()" disabled class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium py-3 rounded-lg shadow mt-2 disabled:bg-slate-300 disabled:cursor-not-allowed">
+          Simpan Absensi Kelas
+        </button>
+
       </div>
+    </div>
 
-      <hr class="border-dashed my-2">
-
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1">Disimak Oleh (Guru)</label>
-        <select id="disimak_guru" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
-          <option value="">-- Pilih Ustadzah --</option>
-          <option value="Ustadzah Salamah">Ustadzah Salamah</option>
-          <option value="Ustadzah Rosianah">Ustadzah Rosianah</option>
-        </select>
-      </div>
-
-      <button type="submit" id="btnSubmit" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium py-3 rounded-lg shadow mt-2">
-        Simpan Data
-      </button>
-
-    </form>
   </div>
 
   <script>
@@ -203,7 +255,7 @@
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // ⚠️ SESUAIKAN DENGAN URL GITHUB PAGES ANDA
-    const BASE_URL_GITHUB = "https://shopee-art.github.io/rqbi";
+    const BASE_URL_GITHUB = "https://shopee-art.github.io";
 
     // Daftar 114 Surah Al-Qur'an (Dibalik dari 114 An-Nas s.d 1 Al-Fatihah)
     const daftarSurat = [
@@ -217,16 +269,38 @@
       "Ad-Dukhan", "Az-Zukhruf", "Asy-Syura", "Fushshilat", "Ghafir", "Az-Zumar", "Shad", "Ash-Shaffat", "Ya-Sin", "Fathir",
       "Saba'", "Al-Ahzab", "As-Sajdah", "Luqman", "Ar-Rum", "Al-'Ankabut", "Al-Qasash", "An-Naml", "Asy-Syu'ara'", "Al-Furqan",
       "An-Nur", "Al-Mu'minun", "Al-Hajj", "Al-Anbiya'", "Tha-Ha", "Maryam", "Al-Kahf", "Al-Isra'", "An-Nahl", "Al-Hijr",
-      "Ibrahim", "Ar-Ra'd", "Yusuf", "Hud", "Yunus", "At-Taubah", "Al-Anfal", "Al-A'raf", "Al-An'am", "Al-Ma'idah",
+      "Ibrahim", "Ar-Ra'd", "Yusuf", "Hud", "Yusuf", "At-Taubah", "Al-Anfal", "Al-A'raf", "Al-An'am", "Al-Ma'idah",
       "An-Nisa'", "Ali 'Imran", "Al-Baqarah", "Al-Fatihah"
     ];
 
     let globalDataSantri = [];
 
     // Set tanggal default ke hari ini
-    document.getElementById('tanggal').value = new Date().toISOString().substring(0, 10);
+    const todayISO = new Date().toISOString().substring(0, 10);
+    document.getElementById('tanggal').value = todayISO;
+    document.getElementById('absen_tanggal').value = todayISO;
 
-    // Populate Dropdown Surat dengan Nomor Asli Surah (114 s.d 1)
+    // TAB SWITCHER FUNCTION
+    function switchTab(tab) {
+      const tabPrestasi = document.getElementById('tabPrestasi');
+      const tabAbsensi = document.getElementById('tabAbsensi');
+      const btnPrestasi = document.getElementById('tabBtnPrestasi');
+      const btnAbsensi = document.getElementById('tabBtnAbsensi');
+
+      if (tab === 'prestasi') {
+        tabPrestasi.classList.remove('hidden');
+        tabAbsensi.classList.add('hidden');
+        btnPrestasi.className = "w-1/2 py-2.5 rounded-lg bg-white text-emerald-700 shadow-sm transition-all text-center font-bold";
+        btnAbsensi.className = "w-1/2 py-2.5 rounded-lg text-slate-600 hover:text-slate-800 transition-all text-center font-bold";
+      } else {
+        tabAbsensi.classList.remove('hidden');
+        tabPrestasi.classList.add('hidden');
+        btnAbsensi.className = "w-1/2 py-2.5 rounded-lg bg-white text-emerald-700 shadow-sm transition-all text-center font-bold";
+        btnPrestasi.className = "w-1/2 py-2.5 rounded-lg text-slate-600 hover:text-slate-800 transition-all text-center font-bold";
+      }
+    }
+
+    // Populate Dropdown Surat
     function populateSurat() {
       const selectSurat = document.getElementById('hafalan_surat');
       const totalSurat = daftarSurat.length;
@@ -246,10 +320,17 @@
 
         const daftarKelas = [...new Set(globalDataSantri.map(s => s.kelas))].filter(Boolean);
         
+        // Populate Dropdown Kelas untuk Prestasi
         const selectKelas = document.getElementById('filter_kelas');
         selectKelas.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+
+        // Populate Dropdown Kelas untuk Absensi
+        const selectKelasAbsen = document.getElementById('absen_filter_kelas');
+        selectKelasAbsen.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+
         daftarKelas.forEach(kelas => {
           selectKelas.innerHTML += `<option value="${kelas}">${kelas}</option>`;
+          selectKelasAbsen.innerHTML += `<option value="${kelas}">${kelas}</option>`;
         });
 
       } catch (err) {
@@ -269,7 +350,7 @@
       input.focus();
     }
 
-    // Event Listener Filter Santri berdasarkan Kelas
+    // Event Listener Filter Santri berdasarkan Kelas (Prestasi)
     document.getElementById('filter_kelas').addEventListener('change', (e) => {
       const kelasDipilih = e.target.value;
       const selectSantri = document.getElementById('id_santri');
@@ -289,7 +370,7 @@
       selectSantri.disabled = false;
     });
 
-    // Event Submit Form ke Supabase & Pemicu WA
+    // Event Submit Form Prestasi ke Supabase & Pemicu WA
     document.getElementById('formPrestasi').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btnSubmit');
@@ -312,26 +393,22 @@
       };
 
       try {
-        // 1. Simpan ke Supabase
         const { data, error } = await db.from('kartu_prestasi').insert([payload]).select();
 
         if (error) throw error;
 
         const idBaru = data[0].id_prestasi;
-        
-        // 2. Pencarian Santri & Nomor HP
         const santriTerpilih = globalDataSantri.find(s => String(s.id_santri) === String(payload.id_santri));
         const noHpOrtu = santriTerpilih ? (santriTerpilih.no_hp_ortu || '').trim() : "";
         const namaSantri = santriTerpilih ? santriTerpilih.nama_santri : "Santri";
 
-        // 3. Format Draf Pesan & Link Konfirmasi
         const linkKonfirmasi = `${BASE_URL_GITHUB}/konfirmasi.html?id=${idBaru}`;
-        // Format Draf Pesan WA (Termasuk Nilai Hafalan & Ummi)
-		const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nBerikut ringkasan setoran hari ini:\n- Hafalan: ${payload.hafalan_surat || '-'} (${payload.hafalan_ayat || '-'}) | Nilai: ${payload.hafalan_nilai || '-'}\n- Ummi: ${payload.ummi_jilid || '-'} Hal. ${payload.ummi_halaman || '-'} | Nilai: ${payload.ummi_nilai || '-'}\n\nMohon disimak kembali di rumah, lalu klik link di bawah ini untuk konfirmasi:\n${linkKonfirmasi}\n\nJazakumullah khair.`;
 
-        // 4. Tanya dan Buka WA via window.location.href (Tahan Blokir Pop-up)
+        // Draf pesan lengkap dengan nilai
+        const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nBerikut ringkasan setoran hari ini:\n- Hafalan: ${payload.hafalan_surat || '-'} (${payload.hafalan_ayat || '-'}) | Nilai: ${payload.hafalan_nilai || '-'}\n- Ummi: ${payload.ummi_jilid || '-'} Hal. ${payload.ummi_halaman || '-'} | Nilai: ${payload.ummi_nilai || '-'}\n\nMohon disimak kembali di rumah, lalu klik link di bawah ini untuk konfirmasi:\n${linkKonfirmasi}\n\nJazakumullah khair.`;
+
         if (noHpOrtu) {
-          if (confirm("Data prestasi berhasil disimpan ke Supabase! Kirimkan pesan konfirmasi ke WhatsApp Orang Tua sekarang?")) {
+          if (confirm("Data prestasi berhasil disimpan! Kirimkan pesan konfirmasi ke WhatsApp Orang Tua sekarang?")) {
             const waUrl = `https://wa.me/${noHpOrtu}?text=${encodeURIComponent(teksPesan)}`;
             window.location.href = waUrl;
           }
@@ -339,10 +416,9 @@
           alert("Data prestasi berhasil disimpan! (Catatan: Nomor HP Orang Tua belum diisi pada data santri ini).");
         }
 
-        // Reset Form
         document.getElementById('formPrestasi').reset();
         document.getElementById('id_santri').disabled = true;
-        document.getElementById('tanggal').value = new Date().toISOString().substring(0, 10);
+        document.getElementById('tanggal').value = todayISO;
 
       } catch (err) {
         alert("Gagal menyimpan data ke Supabase: " + err.message);
@@ -351,6 +427,104 @@
         btn.disabled = false;
       }
     });
+
+    // ================= LOGIKA ABSENSI KELAS =================
+    
+    // Render Daftar Santri per Kelas untuk Absensi
+    function renderDaftarAbsenSantri() {
+      const kelasDipilih = document.getElementById('absen_filter_kelas').value;
+      const container = document.getElementById('containerAbsenSantri');
+      const btnSimpan = document.getElementById('btnSimpanAbsen');
+      const countInfo = document.getElementById('absenCountInfo');
+
+      if (!kelasDipilih) {
+        container.innerHTML = `<div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-lg">Pilih kelas terlebih dahulu untuk menampilkan daftar santri.</div>`;
+        btnSimpan.disabled = true;
+        countInfo.innerText = "0 Santri";
+        return;
+      }
+
+      const listSantriKelas = globalDataSantri.filter(s => s.kelas === kelasDipilih);
+      countInfo.innerText = `${listSantriKelas.length} Santri`;
+
+      if (listSantriKelas.length === 0) {
+        container.innerHTML = `<div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-lg">Tidak ada santri di kelas ini.</div>`;
+        btnSimpan.disabled = true;
+        return;
+      }
+
+      container.innerHTML = '';
+      listSantriKelas.forEach(santri => {
+        container.innerHTML += `
+          <div class="bg-slate-50 border border-slate-200 p-2.5 rounded-lg flex items-center justify-between gap-2">
+            <span class="text-xs font-semibold text-slate-800 truncate">${santri.nama_santri}</span>
+            <div class="flex gap-1">
+              <label class="cursor-pointer">
+                <input type="radio" name="status_absen_${santri.id_santri}" value="Hadir" checked class="peer hidden">
+                <span class="px-2 py-1 bg-white border border-slate-300 text-[11px] rounded peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 font-medium transition-all">H</span>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="status_absen_${santri.id_santri}" value="Sakit" class="peer hidden">
+                <span class="px-2 py-1 bg-white border border-slate-300 text-[11px] rounded peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-amber-500 font-medium transition-all">S</span>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="status_absen_${santri.id_santri}" value="Izin" class="peer hidden">
+                <span class="px-2 py-1 bg-white border border-slate-300 text-[11px] rounded peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-blue-500 font-medium transition-all">I</span>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="status_absen_${santri.id_santri}" value="Alfa" class="peer hidden">
+                <span class="px-2 py-1 bg-white border border-slate-300 text-[11px] rounded peer-checked:bg-rose-600 peer-checked:text-white peer-checked:border-rose-600 font-medium transition-all">A</span>
+              </label>
+            </div>
+          </div>
+        `;
+      });
+
+      btnSimpan.disabled = false;
+    }
+
+    // Simpan Absensi Masal Satu Kelas
+    async function simpanAbsensiMasal() {
+      const kelasDipilih = document.getElementById('absen_filter_kelas').value;
+      const tanggalAbsen = document.getElementById('absen_tanggal').value;
+      const btn = document.getElementById('btnSimpanAbsen');
+
+      if (!kelasDipilih || !tanggalAbsen) {
+        alert("Pilih kelas dan tanggal absensi!");
+        return;
+      }
+
+      const listSantriKelas = globalDataSantri.filter(s => s.kelas === kelasDipilih);
+      const payloadAbsensi = [];
+
+      listSantriKelas.forEach(santri => {
+        const statusSelected = document.querySelector(`input[name="status_absen_${santri.id_santri}"]:checked`)?.value || 'Hadir';
+        payloadAbsensi.push({
+          id_santri: santri.id_santri,
+          tanggal: tanggalAbsen,
+          status: statusSelected
+        });
+      });
+
+      btn.innerText = "Menyimpan Absensi...";
+      btn.disabled = true;
+
+      try {
+        const { error } = await db.from('absensi').insert(payloadAbsensi);
+        if (error) throw error;
+
+        alert(`Berhasil! Absensi ${payloadAbsensi.length} santri kelas ${kelasDipilih} tanggal ${tanggalAbsen} telah tersimpan.`);
+        
+        // Reset pilihan kelas absensi
+        document.getElementById('absen_filter_kelas').value = '';
+        renderDaftarAbsenSantri();
+
+      } catch (err) {
+        alert("Gagal menyimpan absensi: " + err.message);
+      } finally {
+        btn.innerText = "Simpan Absensi Kelas";
+      }
+    }
 
     populateSurat();
     loadSantri();
