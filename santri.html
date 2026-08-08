@@ -3,17 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kelola Data Santri - Rumah Quran</title>
+  <title>Rumah Qur'an Baitul Itqan - Kelola Data Santri</title>
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 pb-10">
 
-  <div class="bg-emerald-600 text-white p-4 sticky top-0 shadow-md z-10 flex justify-between items-center">
-    <h1 class="text-lg font-bold">👥 Kelola Data Santri</h1>
-    <a href="index.html" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-500">
-      ← Kembali
+  <div class="bg-emerald-600 text-white p-3 sticky top-0 shadow-md z-10 flex justify-between items-center">
+    <div class="flex items-center gap-2.5">
+      <img src="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png" alt="Logo RQ Baitul Itqan" class="w-8 h-8 rounded-full bg-white p-0.5 shadow-sm">
+      <div>
+        <h1 class="text-sm sm:text-base font-bold leading-tight">Rumah Qur'an Baitul Itqan</h1>
+        <p class="text-[10px] text-emerald-100 font-medium">👥 Kelola Data Santri</p>
+      </div>
+    </div>
+    <a href="index.html" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-500 font-medium">
+      ← Utama
     </a>
   </div>
 
@@ -127,7 +134,7 @@
   </div>
 
   <script>
-    // ⚠️ ISI DENGAN API URL & ANON KEY SUPABASE ANDA
+    // ⚠️ SESUAIKAN DENGAN API URL & ANON KEY SUPABASE ANDA
     const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; 
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; 
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -135,7 +142,6 @@
     let listSantri = [];
     let parsedExcelData = [];
 
-    // --- READ (TAMPILKAN DATA) ---
     async function loadDataSantri() {
       try {
         const { data, error } = await db
@@ -179,7 +185,6 @@
       });
     }
 
-    // --- CREATE MANUAL ---
     document.getElementById('formTambah').addEventListener('submit', async (e) => {
       e.preventDefault();
       const nama = document.getElementById('addNama').value;
@@ -198,7 +203,6 @@
       }
     });
 
-    // --- CREATE VIA EXCEL ---
     document.getElementById('excelFile').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -248,7 +252,6 @@
       }
     });
 
-    // --- UPDATE ---
     function bukaModalEdit(id) {
       const santri = listSantri.find(s => s.id_santri === id);
       if (!santri) return;
@@ -293,7 +296,6 @@
       }
     });
 
-    // --- DELETE ---
     async function hapusSantri(id, nama) {
       if (!confirm(`Apakah Anda yakin ingin menghapus santri "${nama}"?`)) return;
 
@@ -308,7 +310,6 @@
       }
     }
 
-    // --- SEARCH / FILTER ---
     document.getElementById('searchKeyword').addEventListener('input', (e) => {
       const keyword = e.target.value.toLowerCase();
       const filtered = listSantri.filter(s => 
@@ -318,7 +319,6 @@
       renderTabel(filtered);
     });
 
-    // --- HELPER FUNCTION ---
     function formatNoHp(no) {
       let cleaned = String(no).replace(/\D/g, '');
       if (cleaned.startsWith('0')) {
@@ -327,7 +327,6 @@
       return cleaned;
     }
 
-    // Jalankan saat halaman dibuka
     loadDataSantri();
   </script>
 </body>
