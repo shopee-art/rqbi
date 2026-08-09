@@ -41,7 +41,7 @@
       <img src="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png" alt="Logo RQ Baitul Itqan" class="w-8 h-8 rounded-full bg-white p-0.5 shadow-sm">
       <div>
         <h1 class="text-sm font-bold leading-tight">Rumah Qur'an Baitul Itqan</h1>
-        <p class="text-[10px] text-emerald-100 font-medium">🎓 Input Ujian Kenaikan Jilid</p>
+        <p class="text-[10px] text-emerald-100 font-medium">🎓 Ujian Kenaikan Jilid</p>
       </div>
     </div>
     <button onclick="logoutPengurus()" class="text-xs bg-emerald-700 hover:bg-emerald-800 active:scale-95 px-2.5 py-1.5 rounded-lg border border-emerald-500 font-semibold flex items-center gap-1 transition-all shadow">
@@ -49,93 +49,207 @@
     </button>
   </div>
 
-  <div class="max-w-md mx-auto p-4 space-y-4">
+  <div class="max-w-4xl mx-auto p-4 space-y-6">
 
-    <div class="grid grid-cols-3 gap-1.5 text-[11px] sm:text-xs font-medium mb-2">
-      <a href="index.html" class="bg-white hover:bg-slate-100 text-emerald-700 py-2 px-1.5 rounded-lg border border-slate-200 shadow-sm flex items-center justify-center gap-1 transition-all text-center font-bold">
+    <div class="grid grid-cols-4 gap-1.5 text-[11px] sm:text-xs font-medium">
+      <a href="index.html" class="bg-white hover:bg-slate-100 text-emerald-700 py-2 px-1 rounded-lg border border-slate-200 shadow-sm flex items-center justify-center gap-1 transition-all text-center font-bold">
         <span>📖</span> Form Utama
       </a>
-      <a href="santri.html" class="bg-white hover:bg-slate-100 text-emerald-700 py-2 px-1.5 rounded-lg border border-slate-200 shadow-sm flex items-center justify-center gap-1 transition-all text-center">
+      <a href="santri.html" class="bg-white hover:bg-slate-100 text-emerald-700 py-2 px-1 rounded-lg border border-slate-200 shadow-sm flex items-center justify-center gap-1 transition-all text-center">
         <span>👥</span> Kelola Santri
       </a>
-      <a href="prestasi.html" class="bg-white hover:bg-slate-100 text-emerald-700 py-2 px-1.5 rounded-lg border border-slate-200 shadow-sm flex items-center justify-center gap-1 transition-all text-center">
+      <a href="prestasi.html" class="bg-white hover:bg-slate-100 text-emerald-700 py-2 px-1 rounded-lg border border-slate-200 shadow-sm flex items-center justify-center gap-1 transition-all text-center">
         <span>📜</span> Rekap Prestasi
+      </a>
+      <a href="absensi.html" class="bg-white hover:bg-slate-100 text-emerald-700 py-2 px-1 rounded-lg border border-slate-200 shadow-sm flex items-center justify-center gap-1 transition-all text-center">
+        <span>📋</span> Rekap Absensi
       </a>
     </div>
 
-    <form id="formUjian" class="bg-white rounded-xl shadow-sm p-5 space-y-4 border border-slate-100">
-      <h2 class="text-xs font-bold text-emerald-700 uppercase tracking-wider border-b pb-2">Form Hasil Ujian Munaqosyah / Kenaikan</h2>
+    <div class="max-w-md mx-auto">
+      <form id="formUjian" class="bg-white rounded-xl shadow-sm p-5 space-y-4 border border-slate-100">
+        <h2 class="text-xs font-bold text-emerald-700 uppercase tracking-wider border-b pb-2">➕ Form Input Hasil Ujian Kenaikan</h2>
 
-      <div class="space-y-3">
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Kelas</label>
+            <select id="filter_kelas" required class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+              <option value="">-- Memuat Kelas... --</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Santri</label>
+            <select id="id_santri" required disabled class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none disabled:bg-slate-200">
+              <option value="">-- Pilih Kelas Terlebih Dahulu --</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Ujian</label>
+            <input type="date" id="tanggal" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-slate-50">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Ujian</label>
+            <select id="nama_ujian" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white focus:ring-2 focus:ring-emerald-500">
+              <option value="">-- Pilih Ujian --</option>
+              <option value="Kenaikan Jilid 2">Kenaikan Jilid 2</option>
+              <option value="Kenaikan Jilid 3">Kenaikan Jilid 3</option>
+              <option value="Kenaikan Jilid 4">Kenaikan Jilid 4</option>
+              <option value="Kenaikan Jilid 5">Kenaikan Jilid 5</option>
+              <option value="Kenaikan Jilid 6">Kenaikan Jilid 6</option>
+              <option value="Kenaikan Ghorib">Kenaikan Ghorib</option>
+              <option value="Kenaikan Tajwid">Kenaikan Tajwid</option>
+              <option value="Kenaikan Al-Qur'an">Kenaikan Al-Qur'an</option>
+            </select>
+          </div>
+        </div>
+
+        <hr class="border-dashed my-1">
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Nilai Ujian</label>
+            <input type="text" id="nilai_ujian" required placeholder="Contoh: 88 / A" class="w-full border rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Keterangan Status</label>
+            <select id="keterangan" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white font-semibold">
+              <option value="Lulus">Lulus (Lanjut Jilid)</option>
+              <option value="Belum Lulus">Belum Lulus (Mengulang)</option>
+            </select>
+          </div>
+        </div>
+
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Kelas</label>
-          <select id="filter_kelas" required class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
-            <option value="">-- Memuat Kelas... --</option>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Penguji (Ustadzah)</label>
+          <select id="penguji" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
+            <option value="">-- Pilih Ustadzah Penguji --</option>
+            <option value="Ustadzah Salamah">Ustadzah Salamah</option>
+            <option value="Ustadzah Rosianah">Ustadzah Rosianah</option>
           </select>
         </div>
 
+        <button type="submit" id="btnSubmit" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium py-3 rounded-lg shadow mt-2">
+          Simpan Hasil Ujian
+        </button>
+      </form>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 space-y-4">
+      
+      <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 border-b pb-3">
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Santri</label>
-          <select id="id_santri" required disabled class="w-full border rounded-lg p-2.5 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500 outline-none disabled:bg-slate-200">
-            <option value="">-- Pilih Kelas Terlebih Dahulu --</option>
+          <h2 class="text-sm font-bold text-slate-800">📜 Rekapitulasi Hasil Ujian</h2>
+          <p class="text-xs text-slate-500" id="totalUjianInfo">Memuat data...</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-2">
+          <select id="filterRekapKelas" onchange="filterDataRekap()" class="text-xs p-2 border border-slate-300 rounded-lg outline-none bg-white">
+            <option value="">-- Semua Kelas --</option>
+          </select>
+          <input type="text" id="searchRekapKeyword" oninput="filterDataRekap()" placeholder="Cari nama atau ujian..." class="text-xs p-2 border border-slate-300 rounded-lg w-full sm:w-48 outline-none">
+        </div>
+      </div>
+
+      <div id="mobileCardUjianContainer" class="block md:hidden space-y-3">
+        <div class="p-6 text-center text-slate-400 bg-slate-50 rounded-xl text-xs">
+          Sedang mengambil data rekapan...
+        </div>
+      </div>
+
+      <div class="hidden md:block overflow-x-auto border rounded-lg">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead class="bg-slate-100 border-b font-semibold text-slate-700">
+            <tr>
+              <th class="p-3">Tanggal</th>
+              <th class="p-3">Santri & Kelas</th>
+              <th class="p-3">Nama Ujian</th>
+              <th class="p-3">Nilai</th>
+              <th class="p-3">Status</th>
+              <th class="p-3">Penguji</th>
+              <th class="p-3 text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabelUjianBody" class="divide-y text-slate-600">
+            <tr>
+              <td colspan="7" class="p-4 text-center text-slate-400">Sedang mengambil data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="modalEditUjian" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 overflow-y-auto">
+    <div class="bg-white rounded-xl shadow-lg p-5 max-w-md w-full space-y-4 my-8">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-sm font-bold text-slate-800">✏️ Edit Hasil Ujian</h3>
+        <button onclick="tutupModalEdit()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+      </div>
+
+      <form id="formEditUjian" class="space-y-3 text-xs">
+        <input type="hidden" id="editIdUjian">
+
+        <div>
+          <label class="block font-medium text-slate-600 mb-1">Nama Santri</label>
+          <input type="text" id="editNamaSantri" disabled class="w-full p-2 border border-slate-200 rounded-lg bg-slate-100 font-semibold text-slate-700">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-medium text-slate-600 mb-1">Tanggal Ujian</label>
+            <input type="date" id="editTanggal" required class="w-full p-2 border border-slate-300 rounded-lg">
+          </div>
+          <div>
+            <label class="block font-medium text-slate-600 mb-1">Nama Ujian</label>
+            <select id="editNamaUjian" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+              <option value="Kenaikan Jilid 2">Kenaikan Jilid 2</option>
+              <option value="Kenaikan Jilid 3">Kenaikan Jilid 3</option>
+              <option value="Kenaikan Jilid 4">Kenaikan Jilid 4</option>
+              <option value="Kenaikan Jilid 5">Kenaikan Jilid 5</option>
+              <option value="Kenaikan Jilid 6">Kenaikan Jilid 6</option>
+              <option value="Kenaikan Ghorib">Kenaikan Ghorib</option>
+              <option value="Kenaikan Tajwid">Kenaikan Tajwid</option>
+              <option value="Kenaikan Al-Qur'an">Kenaikan Al-Qur'an</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-medium text-slate-600 mb-1">Nilai Ujian</label>
+            <input type="text" id="editNilaiUjian" required class="w-full p-2 border border-slate-300 rounded-lg">
+          </div>
+          <div>
+            <label class="block font-medium text-slate-600 mb-1">Keterangan</label>
+            <select id="editKeterangan" required class="w-full p-2 border border-slate-300 rounded-lg bg-white font-semibold">
+              <option value="Lulus">Lulus</option>
+              <option value="Belum Lulus">Belum Lulus</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-medium text-slate-600 mb-1">Penguji</label>
+          <select id="editPenguji" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+            <option value="Ustadzah Salamah">Ustadzah Salamah</option>
+            <option value="Ustadzah Rosianah">Ustadzah Rosianah</option>
           </select>
         </div>
-      </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Ujian</label>
-          <input type="date" id="tanggal" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-slate-50">
+        <div class="flex justify-end gap-2 pt-3 border-t">
+          <button type="button" onclick="tutupModalEdit()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg font-medium">Batal</button>
+          <button type="submit" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium">Simpan Perubahan</button>
         </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Ujian</label>
-          <select id="nama_ujian" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white focus:ring-2 focus:ring-emerald-500">
-            <option value="">-- Pilih Ujian --</option>
-            <option value="Kenaikan Jilid 2">Kenaikan Jilid 2</option>
-            <option value="Kenaikan Jilid 3">Kenaikan Jilid 3</option>
-            <option value="Kenaikan Jilid 4">Kenaikan Jilid 4</option>
-            <option value="Kenaikan Jilid 5">Kenaikan Jilid 5</option>
-            <option value="Kenaikan Jilid 6">Kenaikan Jilid 6</option>
-            <option value="Kenaikan Ghorib">Kenaikan Ghorib</option>
-            <option value="Kenaikan Tajwid">Kenaikan Tajwid</option>
-            <option value="Kenaikan Al-Qur'an">Kenaikan Al-Qur'an</option>
-          </select>
-        </div>
-      </div>
-
-      <hr class="border-dashed my-1">
-
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Nilai Ujian</label>
-          <input type="text" id="nilai_ujian" required placeholder="Contoh: 88 / A" class="w-full border rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Keterangan Status</label>
-          <select id="keterangan" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white font-semibold">
-            <option value="Lulus">Lulus (Lanjut Jilid)</option>
-            <option value="Belum Lulus">Belum Lulus (Mengulang)</option>
-          </select>
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1">Penguji (Ustadzah)</label>
-        <select id="penguji" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
-          <option value="">-- Pilih Ustadzah Penguji --</option>
-          <option value="Ustadzah Salamah">Ustadzah Salamah</option>
-          <option value="Ustadzah Rosianah">Ustadzah Rosianah</option>
-        </select>
-      </div>
-
-      <button type="submit" id="btnSubmit" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium py-3 rounded-lg shadow mt-2">
-        Simpan Hasil Ujian
-      </button>
-
-    </form>
-
+      </form>
+    </div>
   </div>
 
   <script>
@@ -145,12 +259,12 @@
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let globalDataSantri = [];
+    let listUjian = [];
+    let listSantriMap = {};
 
-    // Set tanggal default ke hari ini
     const todayISO = new Date().toISOString().substring(0, 10);
     document.getElementById('tanggal').value = todayISO;
 
-    // Helper merapikan nomor HP ke format 62xxx
     function rapihkanNoHp(no) {
       if (!no) return "";
       let cleaned = String(no).replace(/\D/g, '');
@@ -160,7 +274,12 @@
       return cleaned;
     }
 
-    // Load Data Santri & Filter Kelas dari Supabase
+    async function init() {
+      await loadSantri();
+      await loadDataUjian();
+    }
+
+    // Load Data Santri dari Supabase
     async function loadSantri() {
       try {
         const { data, error } = await db.from('santri').select('*').order('nama_santri');
@@ -168,12 +287,21 @@
 
         globalDataSantri = data;
 
-        const daftarKelas = [...new Set(globalDataSantri.map(s => s.kelas))].filter(Boolean);
         const selectKelas = document.getElementById('filter_kelas');
+        const selectFilterRekapKelas = document.getElementById('filterRekapKelas');
+        
         selectKelas.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+        selectFilterRekapKelas.innerHTML = '<option value="">-- Semua Kelas --</option>';
+
+        const daftarKelas = [...new Set(globalDataSantri.map(s => s.kelas))].filter(Boolean);
+
+        globalDataSantri.forEach(s => {
+          listSantriMap[s.id_santri] = s;
+        });
 
         daftarKelas.forEach(kelas => {
           selectKelas.innerHTML += `<option value="${kelas}">${kelas}</option>`;
+          selectFilterRekapKelas.innerHTML += `<option value="${kelas}">${kelas}</option>`;
         });
 
       } catch (err) {
@@ -181,7 +309,7 @@
       }
     }
 
-    // Event Listener Filter Santri berdasarkan Kelas
+    // Event Listener Filter Santri di Form Input
     document.getElementById('filter_kelas').addEventListener('change', (e) => {
       const kelasDipilih = e.target.value;
       const selectSantri = document.getElementById('id_santri');
@@ -201,7 +329,7 @@
       selectSantri.disabled = false;
     });
 
-    // Event Submit Form Ujian ke Supabase & Pemicu WA
+    // Submit Form Ujian Baru
     document.getElementById('formUjian').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btnSubmit');
@@ -218,16 +346,13 @@
       };
 
       try {
-        // 1. Simpan ke Supabase
-        const { data, error } = await db.from('ujian_jilid').insert([payload]).select();
+        const { error } = await db.from('ujian_jilid').insert([payload]);
         if (error) throw error;
 
-        // 2. Pencarian Data Santri & No HP Ortu
         const santriTerpilih = globalDataSantri.find(s => String(s.id_santri) === String(payload.id_santri));
         let noHpOrtu = santriTerpilih ? rapihkanNoHp(santriTerpilih.no_hp_ortu) : "";
         const namaSantri = santriTerpilih ? santriTerpilih.nama_santri : "Santri";
 
-        // Prompt input jika nomor HP belum terdaftar
         if (!noHpOrtu) {
           const inputManual = prompt(`Hasil Ujian berhasil disimpan!\nNamun nomor HP orang tua "${namaSantri}" belum ada di database.\n\nMasukkan nomor HP WhatsApp Ortu sekarang (Contoh: 081234567890):`);
           if (inputManual) {
@@ -235,16 +360,13 @@
           }
         }
 
-        // Status Kelulusan (Emoji & Kata)
         const isLulus = payload.keterangan === 'Lulus';
         const ucapanLulus = isLulus 
           ? `🎉 *Selamat! Santri dinyatakan LULUS* dan diperkenankan melanjutkan ke tingkat berikutnya.` 
           : `💪 Santri dinyatakan *BELUM LULUS* dan perlu mengulang materi sebelum ujian kembali. Mohon bimbingan di rumah.`;
 
-        // 3. Draf Pesan WA Pengumuman Ujian
         const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nBerikut adalah Laporan Hasil Ujian Santri di Rumah Qur'an Baitul Itqan:\n\n📌 Ujian: *${payload.nama_ujian}*\n📅 Tanggal: ${payload.tanggal}\n📊 Nilai: *${payload.nilai_ujian}*\n🎓 Keterangan: *${payload.keterangan.toUpperCase()}*\n👩‍🏫 Penguji: ${payload.penguji}\n\n${ucapanLulus}\n\nJazakumullah khair atas perhatian dan kerjasamanya.`;
 
-        // 4. Tanya dan Buka WA
         if (noHpOrtu) {
           if (confirm(`Kirimkan Laporan Ujian ${namaSantri} ke WhatsApp Orang Tua (${noHpOrtu}) sekarang?`)) {
             const waUrl = `https://wa.me/${noHpOrtu}?text=${encodeURIComponent(teksPesan)}`;
@@ -254,10 +376,10 @@
           alert("Hasil ujian berhasil disimpan tanpa pengiriman laporan WhatsApp.");
         }
 
-        // Reset Form
         document.getElementById('formUjian').reset();
         document.getElementById('id_santri').disabled = true;
         document.getElementById('tanggal').value = todayISO;
+        loadDataUjian();
 
       } catch (err) {
         alert("Gagal menyimpan data ujian ke Supabase: " + err.message);
@@ -267,7 +389,183 @@
       }
     });
 
-    loadSantri();
+    // READ: Load Rekapan Data Ujian dari Supabase
+    async function loadDataUjian() {
+      try {
+        const { data, error } = await db
+          .from('ujian_jilid')
+          .select('*, santri(nama_santri, kelas)')
+          .order('tanggal', { ascending: false });
+
+        if (error) throw error;
+        listUjian = data;
+        renderTampilanRekap(listUjian);
+      } catch (err) {
+        console.error("Gagal memuat rekapan ujian:", err);
+      }
+    }
+
+    // Render Tampilan Card & Tabel Rekapan Ujian
+    function renderTampilanRekap(data) {
+      const mobileContainer = document.getElementById('mobileCardUjianContainer');
+      const tableBody = document.getElementById('tabelUjianBody');
+      const totalInfo = document.getElementById('totalUjianInfo');
+
+      mobileContainer.innerHTML = '';
+      tableBody.innerHTML = '';
+      totalInfo.innerText = `Total: ${data.length} Data Ujian`;
+
+      if (data.length === 0) {
+        const emptyState = `<div class="p-6 text-center text-slate-400 bg-slate-50 rounded-xl text-xs">Belum ada riwayat hasil ujian.</div>`;
+        mobileContainer.innerHTML = emptyState;
+        tableBody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400">Belum ada riwayat hasil ujian.</td></tr>`;
+        return;
+      }
+
+      data.forEach(item => {
+        const namaSantri = item.santri ? item.santri.nama_santri : (listSantriMap[item.id_santri]?.nama_santri || 'Santri Terhapus');
+        const kelasSantri = item.santri ? item.santri.kelas : (listSantriMap[item.id_santri]?.kelas || '-');
+
+        const isLulus = (item.keterangan || '').toLowerCase() === 'lulus';
+        const badgeKet = isLulus
+          ? `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold text-[10px]">✓ LULUS</span>`
+          : `<span class="bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-bold text-[10px]">❌ BELUM LULUS</span>`;
+
+        // 1. Mobile Card
+        mobileContainer.innerHTML += `
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2 text-xs">
+            <div class="flex justify-between items-start border-b border-slate-200 pb-2">
+              <div>
+                <h3 class="font-bold text-slate-800 text-sm">${namaSantri}</h3>
+                <span class="bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded text-[10px] font-medium">${kelasSantri}</span>
+              </div>
+              <div class="text-right">
+                <span class="text-slate-500 text-[10px] block">${item.tanggal || '-'}</span>
+                <div>${badgeKet}</div>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center text-xs pt-1">
+              <div>
+                <div class="font-semibold text-emerald-700">${item.nama_ujian}</div>
+                <div class="text-[11px] text-slate-500">Nilai: <b>${item.nilai_ujian || '-'}</b> | Penguji: <b>${item.penguji || '-'}</b></div>
+              </div>
+
+              <div class="flex gap-1">
+                <button onclick="bukaModalEdit(${item.id_ujian})" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-2 py-1 rounded text-xs">Edit</button>
+                <button onclick="hapusUjian(${item.id_ujian})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded text-xs">Hapus</button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // 2. Desktop Table
+        tableBody.innerHTML += `
+          <tr class="hover:bg-slate-50 transition-all">
+            <td class="p-3">${item.tanggal || '-'}</td>
+            <td class="p-3">
+              <div class="font-semibold text-slate-800">${namaSantri}</div>
+              <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[10px]">${kelasSantri}</span>
+            </td>
+            <td class="p-3 font-semibold text-emerald-700">${item.nama_ujian}</td>
+            <td class="p-3 font-bold text-slate-800">${item.nilai_ujian || '-'}</td>
+            <td class="p-3">${badgeKet}</td>
+            <td class="p-3">${item.penguji || '-'}</td>
+            <td class="p-3 text-center space-x-1">
+              <button onclick="bukaModalEdit(${item.id_ujian})" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-2 py-1 rounded text-xs">Edit</button>
+              <button onclick="hapusUjian(${item.id_ujian})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded text-xs">Hapus</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // Modal Edit Ujian
+    function bukaModalEdit(id) {
+      const item = listUjian.find(u => u.id_ujian === id);
+      if (!item) return;
+
+      const namaSantri = item.santri ? item.santri.nama_santri : (listSantriMap[item.id_santri]?.nama_santri || 'Santri');
+
+      document.getElementById('editIdUjian').value = item.id_ujian;
+      document.getElementById('editNamaSantri').value = namaSantri;
+      document.getElementById('editTanggal').value = item.tanggal || '';
+      document.getElementById('editNamaUjian').value = item.nama_ujian || '';
+      document.getElementById('editNilaiUjian').value = item.nilai_ujian || '';
+      document.getElementById('editKeterangan').value = item.keterangan || 'Lulus';
+      document.getElementById('editPenguji').value = item.penguji || '';
+
+      const modal = document.getElementById('modalEditUjian');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function tutupModalEdit() {
+      const modal = document.getElementById('modalEditUjian');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Submit Edit Ujian
+    document.getElementById('formEditUjian').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('editIdUjian').value;
+
+      const payload = {
+        tanggal: document.getElementById('editTanggal').value,
+        nama_ujian: document.getElementById('editNamaUjian').value,
+        nilai_ujian: document.getElementById('editNilaiUjian').value,
+        keterangan: document.getElementById('editKeterangan').value,
+        penguji: document.getElementById('editPenguji').value
+      };
+
+      try {
+        const { error } = await db.from('ujian_jilid').update(payload).eq('id_ujian', id);
+        if (error) throw error;
+
+        alert("Data hasil ujian berhasil diperbarui!");
+        tutupModalEdit();
+        loadDataUjian();
+      } catch (err) {
+        alert("Gagal memperbarui data ujian: " + err.message);
+      }
+    });
+
+    // Delete Ujian
+    async function hapusUjian(id) {
+      if (!confirm("Apakah Anda yakin ingin menghapus data hasil ujian ini?")) return;
+
+      try {
+        const { error } = await db.from('ujian_jilid').delete().eq('id_ujian', id);
+        if (error) throw error;
+
+        alert("Data hasil ujian berhasil dihapus.");
+        loadDataUjian();
+      } catch (err) {
+        alert("Gagal menghapus data ujian: " + err.message);
+      }
+    }
+
+    // Filter & Search Rekapan Ujian
+    function filterDataRekap() {
+      const kelas = document.getElementById('filterRekapKelas').value;
+      const keyword = document.getElementById('searchRekapKeyword').value.toLowerCase();
+
+      const filtered = listUjian.filter(u => {
+        const kelasSantri = u.santri ? u.santri.kelas : (listSantriMap[u.id_santri]?.kelas || '');
+        const namaSantri = u.santri ? u.santri.nama_santri.toLowerCase() : (listSantriMap[u.id_santri]?.nama_santri.toLowerCase() || '');
+        const namaUjian = (u.nama_ujian || '').toLowerCase();
+
+        const matchKelas = !kelas || kelasSantri === kelas;
+        const matchKeyword = !keyword || namaSantri.includes(keyword) || namaUjian.includes(keyword);
+
+        return matchKelas && matchKeyword;
+      });
+
+      renderTampilanRekap(filtered);
+    }
+
+    init();
   </script>
 </body>
 </html>
