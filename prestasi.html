@@ -4,6 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rumah Qur'an Baitul Itqan - Rekap Kartu Prestasi</title>
+    <script>
+    const PIN_RAHASIA = "laatahzan"; // 🔑 PIN Akses Pengurus
+
+    function cekAksesPengurus() {
+      // Cek apakah browser sudah menyimpan status login
+      const isAuth = localStorage.getItem('rqbi_authenticated');
+
+      if (isAuth !== 'true') {
+        const inputPin = prompt("🔒 Halaman Terbatas!\nMasukkan PIN Pengurus / Ustadzah Rumah Qur'an Baitul Itqan:");
+        
+        if (inputPin === PIN_RAHASIA) {
+          localStorage.setItem('rqbi_authenticated', 'true');
+          alert("✅ PIN Benar! Akses diberikan.");
+        } else {
+          alert("❌ PIN Salah atau dibatalkan! Anda akan dialihkan ke Halaman Profil Lembaga.");
+          window.location.href = "tamu.html";
+        }
+      }
+    }
+
+    function logoutPengurus() {
+      if (confirm("Apakah Anda yakin ingin mengunci kembali aplikasi ini?")) {
+        localStorage.removeItem('rqbi_authenticated');
+        window.location.href = "tamu.html";
+      }
+    }
+
+    // ⚠️ WAJIB DIPANGGIL AGAR PERINTAH PIN LANGSUNG DIJALANKAN
+    cekAksesPengurus();
+  </script>
   <link rel="icon" type="image/png" href="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -163,6 +193,8 @@
   </div>
 
   <script>
+  
+
     // ⚠️ SESUAIKAN DENGAN API URL & ANON KEY SUPABASE ANDA
     const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; 
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; 
