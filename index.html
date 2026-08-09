@@ -4,39 +4,75 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rumah Qur'an Baitul Itqan - Input Prestasi & Absensi</title>
+
+  <script>
+    const PIN_RAHASIA = "laatahzan"; // 🔑 PIN Akses Pengurus
+
+    function cekAksesPengurus() {
+      // Cek apakah browser sudah menyimpan status login
+      const isAuth = localStorage.getItem('rqbi_authenticated');
+
+      if (isAuth !== 'true') {
+        const inputPin = prompt("🔒 Halaman Terbatas!\nMasukkan PIN Pengurus / Ustadzah Rumah Qur'an Baitul Itqan:");
+        
+        if (inputPin === PIN_RAHASIA) {
+          localStorage.setItem('rqbi_authenticated', 'true');
+          alert("✅ PIN Benar! Akses diberikan.");
+        } else {
+          alert("❌ PIN Salah atau dibatalkan! Anda akan dialihkan ke Halaman Profil Lembaga.");
+          window.location.href = "tamu.html";
+        }
+      }
+    }
+
+    function logoutPengurus() {
+      if (confirm("Apakah Anda yakin ingin mengunci kembali aplikasi ini?")) {
+        localStorage.removeItem('rqbi_authenticated');
+        window.location.href = "tamu.html";
+      }
+    }
+
+    // ⚠️ WAJIB DIPANGGIL AGAR PERINTAH PIN LANGSUNG DIJALANKAN
+    cekAksesPengurus();
+  </script>
   <link rel="icon" type="image/png" href="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 pb-10">
 
-  <div class="bg-emerald-600 text-white p-3 sticky top-0 shadow-md z-10 flex items-center justify-center gap-3">
-    <img src="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png" alt="Logo RQ Baitul Itqan" class="w-8 h-8 rounded-full bg-white p-0.5 shadow-sm">
-    <div class="text-center">
-      <h1 class="text-base font-bold leading-tight">Rumah Qur'an Baitul Itqan</h1>
-      <p class="text-[11px] text-emerald-100 font-medium">Aplikasi Prestasi & Absensi Santri</p>
+  <div class="bg-emerald-600 text-white p-3 sticky top-0 shadow-md z-10 flex items-center justify-between px-4">
+    <div class="flex items-center gap-2">
+      <img src="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png" alt="Logo RQ Baitul Itqan" class="w-8 h-8 rounded-full bg-white p-0.5 shadow-sm">
+      <div>
+        <h1 class="text-sm font-bold leading-tight">Rumah Qur'an Baitul Itqan</h1>
+        <p class="text-[10px] text-emerald-100 font-medium">Aplikasi Prestasi & Absensi Santri</p>
+      </div>
     </div>
+    <button onclick="logoutPengurus()" class="text-xs bg-emerald-700 hover:bg-emerald-800 active:scale-95 px-2.5 py-1.5 rounded-lg border border-emerald-500 font-semibold flex items-center gap-1 transition-all shadow">
+      <span>🔒</span> Kunci
+    </button>
   </div>
 
   <div class="max-w-md mx-auto p-4 space-y-4">
     
-    <div class="flex justify-between items-center text-xs font-medium">
-      <a href="santri.html" class="bg-white hover:bg-slate-100 text-emerald-700 px-3 py-2 rounded-lg border border-slate-200 shadow-sm flex items-center gap-1.5 transition-all">
+    <div class="grid grid-cols-3 gap-1.5 text-[11px] sm:text-xs font-medium mb-4">
+      <a href="santri.html" class="bg-white hover:bg-slate-100 text-emerald-700 py-2 px-1.5 rounded-lg border border-slate-200 shadow-sm flex items-center justify-center gap-1 transition-all text-center">
         <span>👥</span> Kelola Santri
       </a>
-      <a href="prestasi.html" class="bg-white hover:bg-slate-100 text-emerald-700 px-3 py-2 rounded-lg border border-slate-200 shadow-sm flex items-center gap-1.5 transition-all">
+      <a href="prestasi.html" class="bg-white hover:bg-slate-100 text-emerald-700 py-2 px-1.5 rounded-lg border border-slate-200 shadow-sm flex items-center justify-center gap-1 transition-all text-center">
         <span>📜</span> Rekap Prestasi
       </a>
       <a href="absensi.html" class="bg-white hover:bg-slate-100 text-emerald-700 py-2 px-1.5 rounded-lg border border-slate-200 shadow-sm flex items-center justify-center gap-1 transition-all text-center">
-			<span>📋</span> Rekap Absensi
-		  </a>
+        <span>📋</span> Rekap Absensi
+      </a>
     </div>
 
     <div class="bg-slate-200 p-1 rounded-xl flex text-xs font-bold">
-      <button id="tabBtnPrestasi" onclick="switchTab('prestasi')" class="w-1/2 py-2.5 rounded-lg bg-white text-emerald-700 shadow-sm transition-all text-center">
+      <button id="tabBtnPrestasi" onclick="switchTab('prestasi')" class="w-1/2 py-2.5 rounded-lg bg-white text-emerald-700 shadow-sm transition-all text-center font-bold">
         📖 Input Prestasi
       </button>
-      <button id="tabBtnAbsensi" onclick="switchTab('absensi')" class="w-1/2 py-2.5 rounded-lg text-slate-600 hover:text-slate-800 transition-all text-center">
+      <button id="tabBtnAbsensi" onclick="switchTab('absensi')" class="w-1/2 py-2.5 rounded-lg text-slate-600 hover:text-slate-800 transition-all text-center font-bold">
         📋 Absensi Kelas
       </button>
     </div>
@@ -251,14 +287,14 @@
 
   </div>
 
-  <script>
+<script>
     // ⚠️ SESUAIKAN DENGAN API URL & ANON KEY SUPABASE ANDA
     const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; 
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; 
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // ⚠️ SESUAIKAN DENGAN URL GITHUB PAGES ANDA
-    const BASE_URL_GITHUB = "https://shopee-art.github.io";
+    const BASE_URL_GITHUB = "https://rq-baitulitqan.github.io/rqbi";
 
     // Daftar 114 Surah Al-Qur'an (Dibalik dari 114 An-Nas s.d 1 Al-Fatihah)
     const daftarSurat = [
@@ -272,7 +308,7 @@
       "Ad-Dukhan", "Az-Zukhruf", "Asy-Syura", "Fushshilat", "Ghafir", "Az-Zumar", "Shad", "Ash-Shaffat", "Ya-Sin", "Fathir",
       "Saba'", "Al-Ahzab", "As-Sajdah", "Luqman", "Ar-Rum", "Al-'Ankabut", "Al-Qasash", "An-Naml", "Asy-Syu'ara'", "Al-Furqan",
       "An-Nur", "Al-Mu'minun", "Al-Hajj", "Al-Anbiya'", "Tha-Ha", "Maryam", "Al-Kahf", "Al-Isra'", "An-Nahl", "Al-Hijr",
-      "Ibrahim", "Ar-Ra'd", "Yusuf", "Hud", "Yusuf", "At-Taubah", "Al-Anfal", "Al-A'raf", "Al-An'am", "Al-Ma'idah",
+      "Ibrahim", "Ar-Ra'd", "Yusuf", "Hud", "Yunus", "At-Taubah", "Al-Anfal", "Al-A'raf", "Al-An'am", "Al-Ma'idah",
       "An-Nisa'", "Ali 'Imran", "Al-Baqarah", "Al-Fatihah"
     ];
 
@@ -282,6 +318,16 @@
     const todayISO = new Date().toISOString().substring(0, 10);
     document.getElementById('tanggal').value = todayISO;
     document.getElementById('absen_tanggal').value = todayISO;
+
+    // Helper untuk membersihkan & merapikan nomor HP ke format 62xxx
+    function rapihkanNoHp(no) {
+      if (!no) return "";
+      let cleaned = String(no).replace(/\D/g, ''); // Hapus semua karakter selain angka
+      if (cleaned.startsWith('0')) {
+        cleaned = '62' + cleaned.substring(1);
+      }
+      return cleaned;
+    }
 
     // TAB SWITCHER FUNCTION
     function switchTab(tab) {
@@ -396,27 +442,37 @@
       };
 
       try {
+        // 1. Simpan data ke Supabase
         const { data, error } = await db.from('kartu_prestasi').insert([payload]).select();
 
         if (error) throw error;
 
         const idBaru = data[0].id_prestasi;
         const santriTerpilih = globalDataSantri.find(s => String(s.id_santri) === String(payload.id_santri));
-        const noHpOrtu = santriTerpilih ? (santriTerpilih.no_hp_ortu || '').trim() : "";
+        let noHpOrtu = santriTerpilih ? rapihkanNoHp(santriTerpilih.no_hp_ortu) : "";
         const namaSantri = santriTerpilih ? santriTerpilih.nama_santri : "Santri";
+
+        // 2. Jika nomor HP Ortu belum ada di database, tanyakan langsung via prompt
+        if (!noHpOrtu) {
+          const inputManual = prompt(`Data berhasil disimpan!\nNamun nomor HP orang tua "${namaSantri}" belum ada di database.\n\nMasukkan nomor HP WhatsApp Ortu sekarang (Contoh: 081234567890):`);
+          if (inputManual) {
+            noHpOrtu = rapihkanNoHp(inputManual);
+          }
+        }
 
         const linkKonfirmasi = `${BASE_URL_GITHUB}/konfirmasi.html?id=${idBaru}`;
 
-        // Draf pesan lengkap dengan nilai
+        // 3. Draf pesan lengkap dengan nilai
         const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nBerikut ringkasan setoran hari ini:\n- Hafalan: ${payload.hafalan_surat || '-'} (${payload.hafalan_ayat || '-'}) | Nilai: ${payload.hafalan_nilai || '-'}\n- Ummi: ${payload.ummi_jilid || '-'} Hal. ${payload.ummi_halaman || '-'} | Nilai: ${payload.ummi_nilai || '-'}\n\nMohon disimak kembali di rumah, lalu klik link di bawah ini untuk konfirmasi:\n${linkKonfirmasi}\n\nJazakumullah khair.`;
 
+        // 4. Tanya dan Buka WA
         if (noHpOrtu) {
-          if (confirm("Data prestasi berhasil disimpan! Kirimkan pesan konfirmasi ke WhatsApp Orang Tua sekarang?")) {
+          if (confirm(`Kirimkan laporan setoran ${namaSantri} ke WhatsApp Orang Tua (${noHpOrtu}) sekarang?`)) {
             const waUrl = `https://wa.me/${noHpOrtu}?text=${encodeURIComponent(teksPesan)}`;
             window.location.href = waUrl;
           }
         } else {
-          alert("Data prestasi berhasil disimpan! (Catatan: Nomor HP Orang Tua belum diisi pada data santri ini).");
+          alert("Data prestasi berhasil disimpan tanpa pengiriman laporan WhatsApp.");
         }
 
         document.getElementById('formPrestasi').reset();
