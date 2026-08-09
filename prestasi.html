@@ -265,9 +265,9 @@
         const kelasSantri = item.santri ? item.santri.kelas : (listSantriMap[item.id_santri]?.kelas || '-');
 
         const isOrtuVerified = item.disimak_ortu && item.disimak_ortu.toLowerCase().includes('sudah');
-        const badgeOrtu = isOrtuVerified 
-          ? `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">✓ ${item.disimak_ortu}</span>`
-          : `<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[10px] font-medium">⏳ ${item.disimak_ortu || 'Pending'}</span>`;
+		const badgeOrtu = isOrtuVerified 
+		  ? `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">✓ Sudah Disimak Ortu</span>`
+		  : `<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[10px] font-medium">⏳ Menunggu Konfirmasi Ortu</span>`;
 
         mobileContainer.innerHTML += `
           <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-100 space-y-3">
