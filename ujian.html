@@ -113,26 +113,33 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Nilai Ujian</label>
-            <input type="text" id="nilai_ujian" required placeholder="Contoh: 88 / A" class="w-full border rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Nilai Hafalan</label>
+            <input type="text" id="nilai_hafalan" required placeholder="Contoh: 90 / Mumtaz" class="w-full border rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500">
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Keterangan Status</label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Nilai Ujian Jilid</label>
+            <input type="text" id="nilai_jilid" required placeholder="Contoh: 88 / A" class="w-full border rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Status Kelulusan</label>
             <select id="keterangan" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white font-semibold">
               <option value="Lulus">Lulus (Lanjut Jilid)</option>
               <option value="Belum Lulus">Belum Lulus (Mengulang)</option>
             </select>
           </div>
-        </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Penguji (Ustadzah)</label>
-          <select id="penguji" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
-            <option value="">-- Pilih Ustadzah Penguji --</option>
-            <option value="Ustadzah Salamah">Ustadzah Salamah</option>
-            <option value="Ustadzah Rosianah">Ustadzah Rosianah</option>
-          </select>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Penguji (Ustadzah)</label>
+            <select id="penguji" required class="w-full border rounded-lg p-2.5 text-sm outline-none bg-white">
+              <option value="">-- Pilih Ustadzah --</option>
+              <option value="Ustadzah Salamah">Ustadzah Salamah</option>
+              <option value="Ustadzah Rosianah">Ustadzah Rosianah</option>
+            </select>
+          </div>
         </div>
 
         <button type="submit" id="btnSubmit" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white font-medium py-3 rounded-lg shadow mt-2">
@@ -170,7 +177,8 @@
               <th class="p-3">Tanggal</th>
               <th class="p-3">Santri & Kelas</th>
               <th class="p-3">Nama Ujian</th>
-              <th class="p-3">Nilai</th>
+              <th class="p-3">Nilai Hafalan</th>
+              <th class="p-3">Nilai Jilid</th>
               <th class="p-3">Status</th>
               <th class="p-3">Penguji</th>
               <th class="p-3 text-center">Aksi</th>
@@ -178,7 +186,7 @@
           </thead>
           <tbody id="tabelUjianBody" class="divide-y text-slate-600">
             <tr>
-              <td colspan="7" class="p-4 text-center text-slate-400">Sedang mengambil data...</td>
+              <td colspan="8" class="p-4 text-center text-slate-400">Sedang mengambil data...</td>
             </tr>
           </tbody>
         </table>
@@ -211,6 +219,7 @@
           <div>
             <label class="block font-medium text-slate-600 mb-1">Nama Ujian</label>
             <select id="editNamaUjian" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+              <option value="Kenaikan Jilid 1">Kenaikan Jilid 1</option>
               <option value="Kenaikan Jilid 2">Kenaikan Jilid 2</option>
               <option value="Kenaikan Jilid 3">Kenaikan Jilid 3</option>
               <option value="Kenaikan Jilid 4">Kenaikan Jilid 4</option>
@@ -225,24 +234,30 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-medium text-slate-600 mb-1">Nilai Ujian</label>
-            <input type="text" id="editNilaiUjian" required class="w-full p-2 border border-slate-300 rounded-lg">
+            <label class="block font-medium text-slate-600 mb-1">Nilai Hafalan</label>
+            <input type="text" id="editNilaiHafalan" required class="w-full p-2 border border-slate-300 rounded-lg">
           </div>
           <div>
-            <label class="block font-medium text-slate-600 mb-1">Keterangan</label>
+            <label class="block font-medium text-slate-600 mb-1">Nilai Ujian Jilid</label>
+            <input type="text" id="editNilaiJilid" required class="w-full p-2 border border-slate-300 rounded-lg">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-medium text-slate-600 mb-1">Status Kelulusan</label>
             <select id="editKeterangan" required class="w-full p-2 border border-slate-300 rounded-lg bg-white font-semibold">
               <option value="Lulus">Lulus</option>
               <option value="Belum Lulus">Belum Lulus</option>
             </select>
           </div>
-        </div>
-
-        <div>
-          <label class="block font-medium text-slate-600 mb-1">Penguji</label>
-          <select id="editPenguji" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
-            <option value="Ustadzah Salamah">Ustadzah Salamah</option>
-            <option value="Ustadzah Rosianah">Ustadzah Rosianah</option>
-          </select>
+          <div>
+            <label class="block font-medium text-slate-600 mb-1">Penguji</label>
+            <select id="editPenguji" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+              <option value="Ustadzah Salamah">Ustadzah Salamah</option>
+              <option value="Ustadzah Rosianah">Ustadzah Rosianah</option>
+            </select>
+          </div>
         </div>
 
         <div class="flex justify-end gap-2 pt-3 border-t">
@@ -254,8 +269,9 @@
   </div>
 
   <script>
-    // ⚠️ SESUAIKAN DENGAN API URL & ANON KEY SUPABASE ANDA
-    const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; 
+    // ⚠️ SESUAIKAN DENGAN URL GITHUB PAGES DAN SUPABASE ANDA
+    const BASE_URL_GITHUB = "https://rq-baitulitqan.github.io"; 
+    const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; 
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -341,15 +357,17 @@
         id_santri: parseInt(document.getElementById('id_santri').value),
         tanggal: document.getElementById('tanggal').value,
         nama_ujian: document.getElementById('nama_ujian').value,
-        nilai_ujian: document.getElementById('nilai_ujian').value,
+        nilai_hafalan: document.getElementById('nilai_hafalan').value,
+        nilai_jilid: document.getElementById('nilai_jilid').value,
         keterangan: document.getElementById('keterangan').value,
         penguji: document.getElementById('penguji').value
       };
 
       try {
-        const { error } = await db.from('ujian_jilid').insert([payload]);
+        const { data, error } = await db.from('ujian_jilid').insert([payload]).select();
         if (error) throw error;
 
+        const idBaru = data[0].id_ujian;
         const santriTerpilih = globalDataSantri.find(s => String(s.id_santri) === String(payload.id_santri));
         let noHpOrtu = santriTerpilih ? rapihkanNoHp(santriTerpilih.no_hp_ortu) : "";
         const namaSantri = santriTerpilih ? santriTerpilih.nama_santri : "Santri";
@@ -361,15 +379,14 @@
           }
         }
 
-        const isLulus = payload.keterangan === 'Lulus';
-        const ucapanLulus = isLulus 
-          ? `🎉 *Selamat! Santri dinyatakan LULUS* dan diperkenankan melanjutkan ke tingkat berikutnya.` 
-          : `💪 Santri dinyatakan *BELUM LULUS* dan perlu mengulang materi sebelum ujian kembali. Mohon bimbingan di rumah.`;
+        // URL Rapor Digital Santri
+        const linkLaporan = `${BASE_URL_GITHUB}/hasil_ujian.html?id=${idBaru}`;
 
-        const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nBerikut adalah Laporan Hasil Ujian Santri di Rumah Qur'an Baitul Itqan:\n\n📌 Ujian: *${payload.nama_ujian}*\n📅 Tanggal: ${payload.tanggal}\n📊 Nilai: *${payload.nilai_ujian}*\n🎓 Keterangan: *${payload.keterangan.toUpperCase()}*\n👩‍🏫 Penguji: ${payload.penguji}\n\n${ucapanLulus}\n\nJazakumullah khair atas perhatian dan kerjasamanya.`;
+        // 💬 PESAN SENGJA BIKIN PENASARAN (TANPA HASIL BOLA-BALIK DIBOCORKAN)
+        const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nUstadzah penguji telah selesai merekap Hasil Ujian Santri untuk *${payload.nama_ujian}* pada tanggal ${payload.tanggal}.\n\nUntuk melihat Rapor Digital, Rincian Nilai Hafalan & Jilid, serta Status Kelulusan ananda, silakan klik link resmi di bawah ini:\n👇🏼👇🏼👇🏼\n${linkLaporan}\n\nJazakumullah khair atas perhatian dan bimbingannya di rumah.`;
 
         if (noHpOrtu) {
-          if (confirm(`Kirimkan Laporan Ujian ${namaSantri} ke WhatsApp Orang Tua (${noHpOrtu}) sekarang?`)) {
+          if (confirm(`Kirimkan Notifikasi Laporan Ujian ${namaSantri} ke WhatsApp Orang Tua (${noHpOrtu}) sekarang?`)) {
             const waUrl = `https://wa.me/${noHpOrtu}?text=${encodeURIComponent(teksPesan)}`;
             window.location.href = waUrl;
           }
@@ -419,7 +436,7 @@
       if (data.length === 0) {
         const emptyState = `<div class="p-6 text-center text-slate-400 bg-slate-50 rounded-xl text-xs">Belum ada riwayat hasil ujian.</div>`;
         mobileContainer.innerHTML = emptyState;
-        tableBody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400">Belum ada riwayat hasil ujian.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">Belum ada riwayat hasil ujian.</td></tr>`;
         return;
       }
 
@@ -449,7 +466,8 @@
             <div class="flex justify-between items-center text-xs pt-1">
               <div>
                 <div class="font-semibold text-emerald-700">${item.nama_ujian}</div>
-                <div class="text-[11px] text-slate-500">Nilai: <b>${item.nilai_ujian || '-'}</b> | Penguji: <b>${item.penguji || '-'}</b></div>
+                <div class="text-[11px] text-slate-500">Nilai Hafalan: <b>${item.nilai_hafalan || '-'}</b> | Nilai Jilid: <b>${item.nilai_jilid || '-'}</b></div>
+                <div class="text-[11px] text-slate-400">Penguji: ${item.penguji || '-'}</div>
               </div>
 
               <div class="flex gap-1">
@@ -469,7 +487,8 @@
               <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[10px]">${kelasSantri}</span>
             </td>
             <td class="p-3 font-semibold text-emerald-700">${item.nama_ujian}</td>
-            <td class="p-3 font-bold text-slate-800">${item.nilai_ujian || '-'}</td>
+            <td class="p-3 font-bold text-slate-800">${item.nilai_hafalan || '-'}</td>
+            <td class="p-3 font-bold text-slate-800">${item.nilai_jilid || '-'}</td>
             <td class="p-3">${badgeKet}</td>
             <td class="p-3">${item.penguji || '-'}</td>
             <td class="p-3 text-center space-x-1">
@@ -492,7 +511,8 @@
       document.getElementById('editNamaSantri').value = namaSantri;
       document.getElementById('editTanggal').value = item.tanggal || '';
       document.getElementById('editNamaUjian').value = item.nama_ujian || '';
-      document.getElementById('editNilaiUjian').value = item.nilai_ujian || '';
+      document.getElementById('editNilaiHafalan').value = item.nilai_hafalan || '';
+      document.getElementById('editNilaiJilid').value = item.nilai_jilid || '';
       document.getElementById('editKeterangan').value = item.keterangan || 'Lulus';
       document.getElementById('editPenguji').value = item.penguji || '';
 
@@ -515,7 +535,8 @@
       const payload = {
         tanggal: document.getElementById('editTanggal').value,
         nama_ujian: document.getElementById('editNamaUjian').value,
-        nilai_ujian: document.getElementById('editNilaiUjian').value,
+        nilai_hafalan: document.getElementById('editNilaiHafalan').value,
+        nilai_jilid: document.getElementById('editNilaiJilid').value,
         keterangan: document.getElementById('editKeterangan').value,
         penguji: document.getElementById('editPenguji').value
       };
