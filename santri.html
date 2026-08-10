@@ -4,11 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rumah Qur'an Baitul Itqan - Kelola Data Santri</title>
-    <script>
+  <script>
     const PIN_RAHASIA = "laatahzan"; // 🔑 PIN Akses Pengurus
 
     function cekAksesPengurus() {
-      // Cek apakah browser sudah menyimpan status login
       const isAuth = localStorage.getItem('rqbi_authenticated');
 
       if (isAuth !== 'true') {
@@ -49,9 +48,14 @@
         <p class="text-[10px] text-emerald-100 font-medium">👥 Kelola Data Santri</p>
       </div>
     </div>
-    <a href="index.html" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-500 font-medium">
-      ← Utama
-    </a>
+    <div class="flex items-center gap-2">
+      <button onclick="logoutPengurus()" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-2.5 py-1.5 rounded-lg border border-emerald-500 font-medium">
+        🔒 Kunci
+      </button>
+      <a href="index.html" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-500 font-medium">
+        ← Utama
+      </a>
+    </div>
   </div>
 
   <div class="max-w-4xl mx-auto p-4 space-y-6">
@@ -75,6 +79,10 @@
             <label class="block text-xs font-medium text-slate-600 mb-1">No. HP Orang Tua (WA)</label>
             <input type="text" id="addNoHp" placeholder="Contoh: 6281234567890" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
           </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Link Foto Santri (URL)</label>
+            <input type="url" id="addFotoUrl" placeholder="https://.../foto.jpg (Opsional)" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
           <button type="submit" id="btnSimpanManual" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg text-xs transition-all">
             Simpan Santri
           </button>
@@ -86,7 +94,7 @@
           <span>📥</span> Import dari Excel / CSV
         </h2>
         <p class="text-xs text-slate-500">
-          Format header Excel: <code class="bg-slate-100 px-1 py-0.5 rounded text-emerald-600 font-semibold">nama_santri</code>, <code class="bg-slate-100 px-1 py-0.5 rounded text-emerald-600 font-semibold">kelas</code>, <code class="bg-slate-100 px-1 py-0.5 rounded text-emerald-600 font-semibold">no_hp_ortu</code>.
+          Format header Excel: <code class="bg-slate-100 px-1 py-0.5 rounded text-emerald-600 font-semibold">nama_santri</code>, <code class="bg-slate-100 px-1 py-0.5 rounded text-emerald-600 font-semibold">kelas</code>, <code class="bg-slate-100 px-1 py-0.5 rounded text-emerald-600 font-semibold">no_hp_ortu</code>, <code class="bg-slate-100 px-1 py-0.5 rounded text-emerald-600 font-semibold">foto_url</code>.
         </p>
 
         <div class="border-2 border-dashed border-slate-200 rounded-lg p-3 text-center bg-slate-50 hover:bg-slate-100 transition-all cursor-pointer">
@@ -109,7 +117,7 @@
         </div>
 
         <div class="w-full md:w-auto flex gap-2">
-          <input type="text" id="searchKeyword" placeholder="Cari nama santri..." class="text-xs p-2 border border-slate-300 rounded-lg w-full md:w-48 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          <input type="text" id="searchKeyword" placeholder="Cari nama atau kelas..." class="text-xs p-2 border border-slate-300 rounded-lg w-full md:w-56 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
         </div>
       </div>
 
@@ -118,6 +126,7 @@
           <thead class="bg-slate-100 border-b font-semibold text-slate-700">
             <tr>
               <th class="p-3">No</th>
+              <th class="p-3">Foto</th>
               <th class="p-3">Nama Santri</th>
               <th class="p-3">Kelas</th>
               <th class="p-3">No HP Ortu</th>
@@ -126,7 +135,7 @@
           </thead>
           <tbody id="tabelSantriBody" class="divide-y text-slate-600">
             <tr>
-              <td colspan="5" class="p-4 text-center text-slate-400">Sedang mengambil data...</td>
+              <td colspan="6" class="p-4 text-center text-slate-400">Sedang mengambil data...</td>
             </tr>
           </tbody>
         </table>
@@ -154,6 +163,10 @@
           <label class="block text-xs font-medium text-slate-600 mb-1">No. HP Ortu</label>
           <input type="text" id="editNoHp" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg">
         </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Link Foto Santri (URL)</label>
+          <input type="url" id="editFotoUrl" placeholder="https://.../foto.jpg" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg">
+        </div>
 
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" onclick="tutupModalEdit()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs rounded-lg font-medium">Batal</button>
@@ -164,9 +177,7 @@
   </div>
 
   <script>
-  
-
-    // ⚠️ SESUAIKAN DENGAN API URL & ANON KEY SUPABASE ANDA
+    // ⚠️ KREDENSIAL SUPABASE
     const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; 
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; 
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -197,14 +208,21 @@
       totalInfo.innerText = `Total: ${data.length} Santri`;
 
       if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada data santri.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada data santri.</td></tr>`;
         return;
       }
 
       data.forEach((item, index) => {
+        const foto = item.foto_url 
+          ? item.foto_url 
+          : `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(item.nama_santri)}`;
+
         tbody.innerHTML += `
           <tr class="hover:bg-slate-50 transition-all">
             <td class="p-3 text-slate-400">${index + 1}</td>
+            <td class="p-3">
+              <img src="${foto}" alt="${item.nama_santri}" class="w-8 h-8 rounded-full object-cover border border-slate-200 bg-slate-100" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=default'">
+            </td>
             <td class="p-3 font-semibold text-slate-800">${item.nama_santri}</td>
             <td class="p-3"><span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-medium">${item.kelas}</span></td>
             <td class="p-3">${item.no_hp_ortu || '-'}</td>
@@ -217,14 +235,21 @@
       });
     }
 
+    // SIMPAN SANTRI MANUAL
     document.getElementById('formTambah').addEventListener('submit', async (e) => {
       e.preventDefault();
       const nama = document.getElementById('addNama').value;
       const kelas = document.getElementById('addKelas').value;
       const noHp = formatNoHp(document.getElementById('addNoHp').value);
+      const fotoUrl = document.getElementById('addFotoUrl').value.trim();
 
       try {
-        const { error } = await db.from('santri').insert([{ nama_santri: nama, kelas: kelas, no_hp_ortu: noHp }]);
+        const { error } = await db.from('santri').insert([{ 
+          nama_santri: nama, 
+          kelas: kelas, 
+          no_hp_ortu: noHp,
+          foto_url: fotoUrl || null
+        }]);
         if (error) throw error;
 
         alert("Santri berhasil ditambahkan!");
@@ -235,6 +260,7 @@
       }
     });
 
+    // BACA FILE EXCEL
     document.getElementById('excelFile').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -250,7 +276,8 @@
           parsedExcelData = rawJson.map(row => ({
             nama_santri: row.nama_santri || row.Nama || row.NAMA || '',
             kelas: row.kelas || row.Kelas || row.KELAS || '',
-            no_hp_ortu: formatNoHp(row.no_hp_ortu || row.no_hp || row.NoHP || '')
+            no_hp_ortu: formatNoHp(row.no_hp_ortu || row.no_hp || row.NoHP || ''),
+            foto_url: row.foto_url || row.foto || row.Foto || null
           })).filter(s => s.nama_santri !== '');
 
           if (parsedExcelData.length > 0) {
@@ -264,6 +291,7 @@
       reader.readAsArrayBuffer(file);
     });
 
+    // UNGGAH EXCEL KE SUPABASE
     document.getElementById('btnUploadExcel').addEventListener('click', async () => {
       const btn = document.getElementById('btnUploadExcel');
       btn.innerText = "Mengunggah...";
@@ -284,6 +312,7 @@
       }
     });
 
+    // MODAL EDIT DATA SANTRI
     function bukaModalEdit(id) {
       const santri = listSantri.find(s => s.id_santri === id);
       if (!santri) return;
@@ -292,6 +321,7 @@
       document.getElementById('editNama').value = santri.nama_santri;
       document.getElementById('editKelas').value = santri.kelas;
       document.getElementById('editNoHp').value = santri.no_hp_ortu || '';
+      document.getElementById('editFotoUrl').value = santri.foto_url || '';
 
       const modal = document.getElementById('modalEdit');
       modal.classList.remove('hidden');
@@ -304,18 +334,21 @@
       modal.classList.remove('flex');
     }
 
+    // SUBMIT EDIT SANTRI
     document.getElementById('formEdit').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('editId').value;
       const nama = document.getElementById('editNama').value;
       const kelas = document.getElementById('editKelas').value;
       const noHp = formatNoHp(document.getElementById('editNoHp').value);
+      const fotoUrl = document.getElementById('editFotoUrl').value.trim();
 
       try {
         const { error } = await db.from('santri').update({
           nama_santri: nama,
           kelas: kelas,
-          no_hp_ortu: noHp
+          no_hp_ortu: noHp,
+          foto_url: fotoUrl || null
         }).eq('id_santri', id);
 
         if (error) throw error;
@@ -328,6 +361,7 @@
       }
     });
 
+    // HAPUS SANTRI
     async function hapusSantri(id, nama) {
       if (!confirm(`Apakah Anda yakin ingin menghapus santri "${nama}"?`)) return;
 
@@ -342,6 +376,7 @@
       }
     }
 
+    // FILTER / PENCARIAN INSTAN
     document.getElementById('searchKeyword').addEventListener('input', (e) => {
       const keyword = e.target.value.toLowerCase();
       const filtered = listSantri.filter(s => 
@@ -351,7 +386,9 @@
       renderTabel(filtered);
     });
 
+    // HELPER FORMAT NO HP
     function formatNoHp(no) {
+      if (!no) return "";
       let cleaned = String(no).replace(/\D/g, '');
       if (cleaned.startsWith('0')) {
         cleaned = '62' + cleaned.substring(1);
