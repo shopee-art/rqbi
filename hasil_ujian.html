@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan Hasil Ujian Santri - RQ Baitul Itqan</title>
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 min-h-screen p-4 flex justify-center items-center">
+
+  <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200" id="mainContainer">
+    
+    <div id="loadingState" class="p-8 text-center space-y-3">
+      <div class="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+      <p class="text-xs text-slate-500 font-medium">Memuat Hasil Ujian Santri...</p>
+    </div>
+
+    <div id="contentState" class="hidden">
+      <div class="bg-emerald-700 text-white p-5 text-center relative">
+        <img src="https://res.cloudinary.com/dk8fg3wgm/image/upload/v1786163785/fav_ugojic.png" alt="Logo" class="w-14 h-14 rounded-full bg-white p-1 shadow-md mx-auto mb-2">
+        <h1 class="text-base font-bold uppercase tracking-wide">Rumah Qur'an Baitul Itqan</h1>
+        <p class="text-xs text-emerald-200">Laporan Hasil Ujian Kenaikan Jilid</p>
+      </div>
+
+      <div class="p-5 space-y-5">
+        <div class="flex items-center gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+          <img id="fotoSantri" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Foto Santri" class="w-16 h-16 rounded-full object-cover border-2 border-emerald-500 shadow-sm">
+          <div>
+            <h2 id="namaSantri" class="font-bold text-slate-800 text-sm">Nama Santri</h2>
+            <p id="kelasSantri" class="text-xs text-slate-500">Kelas: -</p>
+            <p id="tanggalUjian" class="text-[11px] text-emerald-700 font-semibold mt-0.5">Tanggal Ujian: -</p>
+          </div>
+        </div>
+
+        <div class="text-center space-y-1 bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
+          <span class="text-[11px] font-semibold text-emerald-800 uppercase tracking-wider">Jenis Ujian</span>
+          <h3 id="namaUjian" class="text-base font-bold text-slate-800">Kenaikan Jilid</h3>
+          <div id="badgeStatus" class="inline-block mt-1">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-center">
+            <span class="text-[10px] font-bold text-slate-500 uppercase block mb-1">Nilai Hafalan</span>
+            <span id="nilaiHafalan" class="text-lg font-black text-emerald-700">-</span>
+          </div>
+          <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-center">
+            <span class="text-[10px] font-bold text-slate-500 uppercase block mb-1">Nilai Ujian Jilid</span>
+            <span id="nilaiJilid" class="text-lg font-black text-emerald-700">-</span>
+          </div>
+        </div>
+
+        <div class="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl space-y-1.5 border border-slate-100">
+          <div class="flex justify-between">
+            <span class="text-slate-400">Penguji / Ustadzah:</span>
+            <span id="penguji" class="font-semibold text-slate-700">-</span>
+          </div>
+          <hr class="border-slate-200">
+          <p id="pesanCatatan" class="text-[11px] leading-relaxed text-slate-600 italic text-center pt-1">
+            </p>
+        </div>
+
+        <div class="text-center pt-2">
+          <p class="text-[10px] text-slate-400">Jazakumullah Khair atas perhatian Bpk/Ibu Wali Santri.</p>
+          <p class="text-[10px] font-bold text-emerald-700 mt-0.5">Rumah Qur'an Baitul Itqan</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="errorState" class="hidden p-8 text-center space-y-3">
+      <div class="text-3xl">❌</div>
+      <h3 class="font-bold text-slate-800 text-sm">Data Ujian Tidak Ditemukan</h3>
+      <p class="text-xs text-slate-500">Mohon periksa kembali link laporan yang Anda terima.</p>
+    </div>
+
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co"; 
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; 
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function loadLaporan() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const idUjian = urlParams.get('id');
+
+      if (!idUjian) {
+        showError();
+        return;
+      }
+
+      try {
+        const { data, error } = await db
+          .from('ujian_jilid')
+          .select('*, santri(*)')
+          .eq('id_ujian', idUjian)
+          .single();
+
+        if (error || !data) throw error;
+
+        // Render Data ke Tampilan
+        const santri = data.santri || {};
+        document.getElementById('namaSantri').innerText = santri.nama_santri || 'Santri';
+        document.getElementById('kelasSantri').innerText = 'Kelas: ' + (santri.kelas || '-');
+        document.getElementById('tanggalUjian').innerText = 'Tanggal Ujian: ' + (data.tanggal || '-');
+        
+        if (santri.foto_url) {
+          document.getElementById('fotoSantri').src = santri.foto_url;
+        }
+
+        document.getElementById('namaUjian').innerText = data.nama_ujian || 'Ujian Kenaikan';
+        document.getElementById('nilaiHafalan').innerText = data.nilai_hafalan || '-';
+        document.getElementById('nilaiJilid').innerText = data.nilai_jilid || '-';
+        document.getElementById('penguji').innerText = data.penguji || '-';
+
+        const isLulus = (data.keterangan || '').toLowerCase() === 'lulus';
+        const badgeEl = document.getElementById('badgeStatus');
+        const pesanEl = document.getElementById('pesanCatatan');
+
+        if (isLulus) {
+          badgeEl.innerHTML = `<span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-bold">🎉 LULUS (Lanjut Jilid)</span>`;
+          pesanEl.innerText = `"Selamat! Santri dinyatakan LULUS dan diperkenankan melanjutkan ke tingkat berikutnya."`;
+        } else {
+          badgeEl.innerHTML = `<span class="bg-rose-100 text-rose-800 text-xs px-3 py-1 rounded-full font-bold">💪 BELUM LULUS (Mengulang)</span>`;
+          pesanEl.innerText = `"Santri dinyatakan BELUM LULUS dan perlu mengulang materi sebelum ujian kembali. Mohon bimbingan di rumah."`;
+        }
+
+        document.getElementById('loadingState').classList.add('hidden');
+        document.getElementById('contentState').classList.remove('hidden');
+
+      } catch (err) {
+        console.error(err);
+        showError();
+      }
+    }
+
+    function showError() {
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('errorState').classList.remove('hidden');
+    }
+
+    loadLaporan();
+  </script>
+</body>
+</html>
