@@ -66,6 +66,7 @@
       </a>
     </div>
 
+    <!-- Form Input Hasil Ujian -->
     <div class="max-w-md mx-auto">
       <form id="formUjian" class="bg-white rounded-xl shadow-sm p-5 space-y-4 border border-slate-100">
         <h2 class="text-xs font-bold text-emerald-700 uppercase tracking-wider border-b pb-2">➕ Form Input Hasil Ujian Kenaikan</h2>
@@ -111,7 +112,7 @@
 
         <hr class="border-dashed my-1">
 
-        <!-- 2 Dropdown Pilihan Surat Hafalan (An-Nas paling atas) -->
+        <!-- 2 Dropdown Surat Hafalan Input -->
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">Materi Hafalan yang Diuji</label>
           <div class="grid grid-cols-2 gap-2">
@@ -166,6 +167,7 @@
       </form>
     </div>
 
+    <!-- Rekapitulasi Data Ujian -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 space-y-4">
       
       <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 border-b pb-3">
@@ -215,7 +217,7 @@
 
   </div>
 
-  <!-- Modal Edit Ujian -->
+  <!-- Modal Edit Ujian (Disesuaikan dengan 2 Dropdown Surat) -->
   <div id="modalEditUjian" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-xl shadow-lg p-5 max-w-md w-full space-y-4 my-8">
       <div class="flex justify-between items-center border-b pb-2">
@@ -252,19 +254,19 @@
           </div>
         </div>
 
-        <!-- 2 Dropdown Surat di Modal Edit -->
+        <!-- 2 Dropdown Surat pada Modal Edit -->
         <div>
-          <label class="block font-medium text-slate-600 mb-1">Materi Hafalan</label>
+          <label class="block font-medium text-slate-600 mb-1">Materi Hafalan yang Diuji</label>
           <div class="grid grid-cols-2 gap-2">
             <div>
               <span class="text-[10px] text-slate-500 block mb-0.5">Dari:</span>
-              <select id="editSuratAwal" required class="w-full p-2 border border-slate-300 rounded-lg bg-white text-xs">
+              <select id="editSuratAwal" required class="w-full p-2 border border-slate-300 rounded-lg bg-white text-xs outline-none focus:ring-2 focus:ring-emerald-500">
                 <option value="">-- Pilih Surat --</option>
               </select>
             </div>
             <div>
               <span class="text-[10px] text-slate-500 block mb-0.5">Sampai:</span>
-              <select id="editSuratAkhir" class="w-full p-2 border border-slate-300 rounded-lg bg-white text-xs">
+              <select id="editSuratAkhir" class="w-full p-2 border border-slate-300 rounded-lg bg-white text-xs outline-none focus:ring-2 focus:ring-emerald-500">
                 <option value="">-- Sama / Selesai --</option>
               </select>
             </div>
@@ -274,25 +276,25 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-medium text-slate-600 mb-1">Nilai Hafalan</label>
-            <input type="text" id="editNilaiHafalan" required class="w-full p-2 border border-slate-300 rounded-lg">
+            <input type="text" id="editNilaiHafalan" required class="w-full p-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
           </div>
           <div>
             <label class="block font-medium text-slate-600 mb-1">Nilai Ujian Jilid</label>
-            <input type="text" id="editNilaiJilid" required class="w-full p-2 border border-slate-300 rounded-lg">
+            <input type="text" id="editNilaiJilid" required class="w-full p-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-medium text-slate-600 mb-1">Status Kelulusan</label>
-            <select id="editKeterangan" required class="w-full p-2 border border-slate-300 rounded-lg bg-white font-semibold">
+            <select id="editKeterangan" required class="w-full p-2 border border-slate-300 rounded-lg bg-white font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
               <option value="Lulus">Lulus</option>
               <option value="Belum Lulus">Belum Lulus</option>
             </select>
           </div>
           <div>
             <label class="block font-medium text-slate-600 mb-1">Penguji</label>
-            <select id="editPenguji" required class="w-full p-2 border border-slate-300 rounded-lg bg-white">
+            <select id="editPenguji" required class="w-full p-2 border border-slate-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-emerald-500">
               <option value="Ustadzah Salamah, S.Kom.I.">Ustadzah Salamah, S.Kom.I.</option>
               <option value="Ustadzah Rosianah">Ustadzah Rosianah</option>
             </select>
@@ -475,7 +477,6 @@
           }
         }
 
-        // URL Rapor Digital Santri
         const linkLaporan = `${BASE_URL_GITHUB}/hasil_ujian.html?id=${idBaru}`;
 
         const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nUstadzah penguji telah selesai merekap Hasil Ujian Santri untuk *${payload.nama_ujian}* pada tanggal ${payload.tanggal}.\n\nUntuk melihat Rapor Digital, Rincian Nilai Hafalan & Jilid, serta Status Kelulusan ananda, silakan klik link resmi di bawah ini:\n👇🏼👇🏼👇🏼\n${linkLaporan}\n\nJazakumullah khair atas perhatian dan bimbingannya di rumah.`;
@@ -597,7 +598,7 @@
       });
     }
 
-    // Modal Edit Ujian
+    // Modal Edit Ujian dengan Parser 2 Dropdown Surat
     function bukaModalEdit(id) {
       const item = listUjian.find(u => u.id_ujian === id);
       if (!item) return;
@@ -609,14 +610,14 @@
       document.getElementById('editTanggal').value = item.tanggal || '';
       document.getElementById('editNamaUjian').value = item.nama_ujian || '';
       
-      // Parse materi_hafalan ke 2 dropdown modal edit
+      // Deteksi dan isi otomatis 2 Dropdown Surat
       const materi = item.materi_hafalan || '';
       if (materi.includes(' s/d ')) {
         const splitMateri = materi.split(' s/d ');
-        document.getElementById('editSuratAwal').value = splitMateri[0] || '';
-        document.getElementById('editSuratAkhir').value = splitMateri[1] || '';
+        document.getElementById('editSuratAwal').value = splitMateri[0] ? splitMateri[0].trim() : '';
+        document.getElementById('editSuratAkhir').value = splitMateri[1] ? splitMateri[1].trim() : '';
       } else {
-        document.getElementById('editSuratAwal').value = materi;
+        document.getElementById('editSuratAwal').value = materi.trim();
         document.getElementById('editSuratAkhir').value = '';
       }
 
@@ -643,6 +644,7 @@
 
       const editAwal = document.getElementById('editSuratAwal').value;
       const editAkhir = document.getElementById('editSuratAkhir').value;
+      
       let editMateri = editAwal;
       if (editAkhir && editAkhir !== editAwal) {
         editMateri = `${editAwal} s/d ${editAkhir}`;
