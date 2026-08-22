@@ -111,6 +111,25 @@
 
         <hr class="border-dashed my-1">
 
+        <!-- 2 Dropdown Pilihan Surat Hafalan (An-Nas paling atas) -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Materi Hafalan yang Diuji</label>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <span class="text-[10px] text-slate-500 block mb-0.5">Dari Surat:</span>
+              <select id="surat_awal" required class="w-full border rounded-lg p-2 bg-white text-xs outline-none focus:ring-2 focus:ring-emerald-500">
+                <option value="">-- Pilih Surat --</option>
+              </select>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 block mb-0.5">Sampai Surat:</span>
+              <select id="surat_akhir" class="w-full border rounded-lg p-2 bg-white text-xs outline-none focus:ring-2 focus:ring-emerald-500">
+                <option value="">-- Sama / Selesai --</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">Nilai Hafalan</label>
@@ -176,6 +195,7 @@
               <th class="p-3">Tanggal</th>
               <th class="p-3">Santri & Kelas</th>
               <th class="p-3">Nama Ujian</th>
+              <th class="p-3">Materi Hafalan</th>
               <th class="p-3">Nilai Hafalan</th>
               <th class="p-3">Nilai Jilid</th>
               <th class="p-3">Status</th>
@@ -185,7 +205,7 @@
           </thead>
           <tbody id="tabelUjianBody" class="divide-y text-slate-600">
             <tr>
-              <td colspan="8" class="p-4 text-center text-slate-400">Sedang mengambil data...</td>
+              <td colspan="9" class="p-4 text-center text-slate-400">Sedang mengambil data...</td>
             </tr>
           </tbody>
         </table>
@@ -195,6 +215,7 @@
 
   </div>
 
+  <!-- Modal Edit Ujian -->
   <div id="modalEditUjian" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 overflow-y-auto">
     <div class="bg-white rounded-xl shadow-lg p-5 max-w-md w-full space-y-4 my-8">
       <div class="flex justify-between items-center border-b pb-2">
@@ -228,6 +249,25 @@
               <option value="Kenaikan Tajwid">Kenaikan Tajwid</option>
               <option value="Kenaikan Al-Qur'an">Kenaikan Al-Qur'an</option>
             </select>
+          </div>
+        </div>
+
+        <!-- 2 Dropdown Surat di Modal Edit -->
+        <div>
+          <label class="block font-medium text-slate-600 mb-1">Materi Hafalan</label>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <span class="text-[10px] text-slate-500 block mb-0.5">Dari:</span>
+              <select id="editSuratAwal" required class="w-full p-2 border border-slate-300 rounded-lg bg-white text-xs">
+                <option value="">-- Pilih Surat --</option>
+              </select>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 block mb-0.5">Sampai:</span>
+              <select id="editSuratAkhir" class="w-full p-2 border border-slate-300 rounded-lg bg-white text-xs">
+                <option value="">-- Sama / Selesai --</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -268,11 +308,37 @@
   </div>
 
   <script>
-    // ⚠️ SESUAIKAN DENGAN URL GITHUB PAGES DAN SUPABASE ANDA
     const BASE_URL_GITHUB = "https://rq-baitulitqan.github.io/rqbi"; 
     const SUPABASE_URL = "https://dzgshmfgklbtpgglcbnh.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6Z3NobWZna2xidHBnZ2xjYm5oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxNDUwMTQsImV4cCI6MjEwMTcyMTAxNH0.BBqqL82VDj7G-unamkgGTNoiR3Eg_xGntDM4EofWhyA"; 
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Daftar 114 Surah Al-Qur'an Urutan Terbalik (114 An-Nas s.d 1 Al-Fatihah)
+    const daftarSurat = [
+      "An-Nas", "Al-Falaq", "Al-Ikhlash", "Al-Lahab", "An-Nashr",
+      "Al-Kafirun", "Al-Kautsar", "Al-Ma'un", "Quraisy", "Al-Fil",
+      "Al-Humazah", "Al-'Asr", "At-Takatsur", "Al-Qari'ah", "Al-'Adiyat",
+      "Az-Zalzalah", "Al-Bayyinah", "Al-Qadr", "Al-'Alaq", "At-Tin",
+      "Asy-Syarh", "Ad-Dhuha", "Al-Lail", "Asy-Syams", "Al-Balad",
+      "Al-Fajr", "Al-Ghasyiyah", "Al-A'la", "Ath-Thariq", "Al-Buruj",
+      "Al-Insyiqaq", "Al-Muthaffifin", "Al-Infitar", "At-Takwir", "'Abasa",
+      "An-Nazi'at", "An-Naba'", "Al-Mursalat", "Al-Insan", "Al-Qiyamah",
+      "Al-Muddatstsir", "Al-Muzzammil", "Al-Jinn", "Nuh", "Al-Ma'arij",
+      "Al-Haqqah", "Al-Qalam", "Al-Mulk", "At-Tahrim", "At-Thalaq",
+      "At-Taghabun", "Al-Munafiqun", "Al-Jumu'ah", "Ash-Shaff", "Al-Mumtahanah",
+      "Al-Hasyr", "Al-Mujadilah", "Al-Hadid", "Al-Waqi'ah", "Ar-Rahman",
+      "Al-Qamar", "An-Najm", "Ath-Thur", "Adz-Dzariyat", "Qaf",
+      "Al-Hujurat", "Al-Fath", "Muhammad", "Al-Ahqaf", "Al-Jatsiyah",
+      "Ad-Dukhan", "Az-Zukhruf", "Asy-Syura", "Fushshilat", "Ghafir",
+      "Az-Zumar", "Shad", "Ash-Shaffat", "Ya-Sin", "Fathir",
+      "Saba'", "Al-Ahzab", "As-Sajdah", "Luqman", "Ar-Rum",
+      "Al-'Ankabut", "Al-Qashash", "An-Naml", "Asy-Syu'ara'", "Al-Furqan",
+      "An-Nur", "Al-Mu'minun", "Al-Hajj", "Al-Anbiya'", "Tha-Ha",
+      "Maryam", "Al-Kahf", "Al-Isra'", "An-Nahl", "Al-Hijr",
+      "Ibrahim", "Ar-Ra'd", "Yusuf", "Hud", "Yunus",
+      "At-Taubah", "Al-Anfal", "Al-A'raf", "Al-An'am", "Al-Ma'idah",
+      "An-Nisa'", "Ali 'Imran", "Al-Baqarah", "Al-Fatihah"
+    ];
 
     let globalDataSantri = [];
     let listUjian = [];
@@ -280,6 +346,27 @@
 
     const todayISO = new Date().toISOString().substring(0, 10);
     document.getElementById('tanggal').value = todayISO;
+
+    function populateDropdownSurat() {
+      const selectAwal = document.getElementById('surat_awal');
+      const selectAkhir = document.getElementById('surat_akhir');
+      const editAwal = document.getElementById('editSuratAwal');
+      const editAkhir = document.getElementById('editSuratAkhir');
+
+      selectAwal.innerHTML = '<option value="">-- Pilih Surat --</option>';
+      selectAkhir.innerHTML = '<option value="">-- Sama / Selesai --</option>';
+      editAwal.innerHTML = '<option value="">-- Pilih Surat --</option>';
+      editAkhir.innerHTML = '<option value="">-- Sama / Selesai --</option>';
+
+      daftarSurat.forEach((surat, index) => {
+        const noSurat = 114 - index;
+        const opt = `<option value="${surat}">${noSurat}. ${surat}</option>`;
+        selectAwal.innerHTML += opt;
+        selectAkhir.innerHTML += opt;
+        editAwal.innerHTML += opt;
+        editAkhir.innerHTML += opt;
+      });
+    }
 
     function rapihkanNoHp(no) {
       if (!no) return "";
@@ -291,6 +378,7 @@
     }
 
     async function init() {
+      populateDropdownSurat();
       await loadSantri();
       await loadDataUjian();
     }
@@ -352,10 +440,19 @@
       btn.innerText = "Lagi menyimpan...";
       btn.disabled = true;
 
+      const suratAwal = document.getElementById('surat_awal').value;
+      const suratAkhir = document.getElementById('surat_akhir').value;
+      
+      let gabunganMateri = suratAwal;
+      if (suratAkhir && suratAkhir !== suratAwal) {
+        gabunganMateri = `${suratAwal} s/d ${suratAkhir}`;
+      }
+
       const payload = {
         id_santri: parseInt(document.getElementById('id_santri').value),
         tanggal: document.getElementById('tanggal').value,
         nama_ujian: document.getElementById('nama_ujian').value,
+        materi_hafalan: gabunganMateri,
         nilai_hafalan: document.getElementById('nilai_hafalan').value,
         nilai_jilid: document.getElementById('nilai_jilid').value,
         keterangan: document.getElementById('keterangan').value,
@@ -381,7 +478,6 @@
         // URL Rapor Digital Santri
         const linkLaporan = `${BASE_URL_GITHUB}/hasil_ujian.html?id=${idBaru}`;
 
-        // 💬 PESAN SENGJA BIKIN PENASARAN (TANPA HASIL BOLA-BALIK DIBOCORKAN)
         const teksPesan = `Assalamu'alaikum Wr. Wb. Bapak/Ibu Wali dari *${namaSantri}*.\n\nUstadzah penguji telah selesai merekap Hasil Ujian Santri untuk *${payload.nama_ujian}* pada tanggal ${payload.tanggal}.\n\nUntuk melihat Rapor Digital, Rincian Nilai Hafalan & Jilid, serta Status Kelulusan ananda, silakan klik link resmi di bawah ini:\n👇🏼👇🏼👇🏼\n${linkLaporan}\n\nJazakumullah khair atas perhatian dan bimbingannya di rumah.`;
 
         if (noHpOrtu) {
@@ -435,7 +531,7 @@
       if (data.length === 0) {
         const emptyState = `<div class="p-6 text-center text-slate-400 bg-slate-50 rounded-xl text-xs">Belum ada riwayat hasil ujian.</div>`;
         mobileContainer.innerHTML = emptyState;
-        tableBody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">Belum ada riwayat hasil ujian.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-400">Belum ada riwayat hasil ujian.</td></tr>`;
         return;
       }
 
@@ -465,6 +561,7 @@
             <div class="flex justify-between items-center text-xs pt-1">
               <div>
                 <div class="font-semibold text-emerald-700">${item.nama_ujian}</div>
+                <div class="text-[11px] text-slate-600">Materi: <b>${item.materi_hafalan || '-'}</b></div>
                 <div class="text-[11px] text-slate-500">Nilai Hafalan: <b>${item.nilai_hafalan || '-'}</b> | Nilai Jilid: <b>${item.nilai_jilid || '-'}</b></div>
                 <div class="text-[11px] text-slate-400">Penguji: ${item.penguji || '-'}</div>
               </div>
@@ -486,6 +583,7 @@
               <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[10px]">${kelasSantri}</span>
             </td>
             <td class="p-3 font-semibold text-emerald-700">${item.nama_ujian}</td>
+            <td class="p-3 text-slate-700">${item.materi_hafalan || '-'}</td>
             <td class="p-3 font-bold text-slate-800">${item.nilai_hafalan || '-'}</td>
             <td class="p-3 font-bold text-slate-800">${item.nilai_jilid || '-'}</td>
             <td class="p-3">${badgeKet}</td>
@@ -510,6 +608,18 @@
       document.getElementById('editNamaSantri').value = namaSantri;
       document.getElementById('editTanggal').value = item.tanggal || '';
       document.getElementById('editNamaUjian').value = item.nama_ujian || '';
+      
+      // Parse materi_hafalan ke 2 dropdown modal edit
+      const materi = item.materi_hafalan || '';
+      if (materi.includes(' s/d ')) {
+        const splitMateri = materi.split(' s/d ');
+        document.getElementById('editSuratAwal').value = splitMateri[0] || '';
+        document.getElementById('editSuratAkhir').value = splitMateri[1] || '';
+      } else {
+        document.getElementById('editSuratAwal').value = materi;
+        document.getElementById('editSuratAkhir').value = '';
+      }
+
       document.getElementById('editNilaiHafalan').value = item.nilai_hafalan || '';
       document.getElementById('editNilaiJilid').value = item.nilai_jilid || '';
       document.getElementById('editKeterangan').value = item.keterangan || 'Lulus';
@@ -531,9 +641,17 @@
       e.preventDefault();
       const id = document.getElementById('editIdUjian').value;
 
+      const editAwal = document.getElementById('editSuratAwal').value;
+      const editAkhir = document.getElementById('editSuratAkhir').value;
+      let editMateri = editAwal;
+      if (editAkhir && editAkhir !== editAwal) {
+        editMateri = `${editAwal} s/d ${editAkhir}`;
+      }
+
       const payload = {
         tanggal: document.getElementById('editTanggal').value,
         nama_ujian: document.getElementById('editNamaUjian').value,
+        materi_hafalan: editMateri,
         nilai_hafalan: document.getElementById('editNilaiHafalan').value,
         nilai_jilid: document.getElementById('editNilaiJilid').value,
         keterangan: document.getElementById('editKeterangan').value,
@@ -576,9 +694,10 @@
         const kelasSantri = u.santri ? u.santri.kelas : (listSantriMap[u.id_santri]?.kelas || '');
         const namaSantri = u.santri ? u.santri.nama_santri.toLowerCase() : (listSantriMap[u.id_santri]?.nama_santri.toLowerCase() || '');
         const namaUjian = (u.nama_ujian || '').toLowerCase();
+        const materiHafalan = (u.materi_hafalan || '').toLowerCase();
 
         const matchKelas = !kelas || kelasSantri === kelas;
-        const matchKeyword = !keyword || namaSantri.includes(keyword) || namaUjian.includes(keyword);
+        const matchKeyword = !keyword || namaSantri.includes(keyword) || namaUjian.includes(keyword) || materiHafalan.includes(keyword);
 
         return matchKelas && matchKeyword;
       });
